@@ -1,5 +1,6 @@
 import { heroImages } from "@/data";
 import { useEffect, useState } from "react";
+import HeroFilters from "./HeroFilters";
 
 function Hero() {
   const [currentSlide, setCurrentSlide] = useState(0);
@@ -12,7 +13,7 @@ function Hero() {
   }, []);
 
   return (
-    <div className="relative w-full h-screen" >
+    <div className="relative w-full h-screen">
       <div className="relative w-full h-screen bg-black overflow-hidden z-0">
         {heroImages.map((image, index) => {
           return (
@@ -27,6 +28,16 @@ function Hero() {
             </div>
           );
         })}
+      </div>
+
+      <div className="absolute top-1/4 left-1/9 text-white flex flex-col text-6xl gap-4">
+        <span>Discover</span>
+        <span>Your Perfect</span>
+        <span>Luxury Escape</span>
+      </div>
+
+      <div className="absolute top-[80%] left-1/9 text-white">
+        <HeroFilters />
       </div>
     </div>
   );
