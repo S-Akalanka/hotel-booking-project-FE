@@ -4,12 +4,16 @@
 @custom-variant dark (&:is(.dark *));
 
 /* custom */
+button{
+    cursor: pointer;
+}
 nav{
   background: rgba(255, 255, 255, 0.025);
   backdrop-filter: blur(4px);
 }
 .nav-theme-icon:hover{
     box-shadow: 0 0 25px rgb(255, 255, 255);
+    background-color: rgba(255, 255, 255, 0.2);
 }
 .sheet-main-content{
     display: block;
@@ -42,8 +46,11 @@ nav{
         grid-column-start: 3;
     }
 }
+.nav-dropdown{
+    background-color: rgba(255, 255, 255, 0.1);
+}
 .nav-dropdown:hover{
-    background-color: rgba(255, 255, 255, 0.5);
+    background-color: rgba(255, 255, 255, 0.2);
 }
 .nav-dropdown-content{
     background-color: rgba(255, 255, 255, 0.9);
@@ -52,6 +59,9 @@ nav{
     @media(width >= 1000px){
         display: none;
     }
+}
+.sheet-btn:hover{
+    background-color: rgba(255, 255, 255, 0.1);
 }
 .left-nav,
 .right-nav-desktop{

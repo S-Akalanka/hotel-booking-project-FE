@@ -33,7 +33,7 @@ function Navigation() {
     setDark(!isDark);
   };
 
-  const isLoggedIn: boolean = true;
+  const isLoggedIn: boolean = false;
 
   return (
     <nav className="grid grid-cols-3 items-center px-7 py-4 text-base z-10 fixed w-full top-0">
@@ -71,7 +71,7 @@ function Navigation() {
       <div className="right-nav flex justify-end items-center">
 
         {/* Desktop View */}
-        <div className="right-nav-desktop flex gap-5 justify-end items-center">
+        <div className="right-nav-desktop flex gap-10 justify-end items-center">
           <button onClick={themeHandler} className="nav-theme-icon cursor-pointer text-white rounded-2xl">
             {isDark ? <Moon size={20} /> : <Sun size={21} />}
           </button>
@@ -79,7 +79,7 @@ function Navigation() {
           {isLoggedIn ? (
             <div className="account">
               <DropdownMenu>
-                <DropdownMenuTrigger asChild className="nav-dropdown border-none py-6 px-3 rounded-2xl">
+                <DropdownMenuTrigger asChild className="nav-dropdown border-none py-6.5 cursor-pointer px-3 rounded-2xl">
                   <Button
                     variant="ghost"
                     className="flex items-center space-x-2"
@@ -92,20 +92,20 @@ function Navigation() {
                   </Button>
                 </DropdownMenuTrigger>
                 <DropdownMenuContent align="end" className="nav-dropdown-content w-56 text-black">
-                  <DropdownMenuItem>
+                  <DropdownMenuItem className="cursor-pointer">
                     <User className="mr-2 h-4 w-4 text-black" />
                     My Account
                   </DropdownMenuItem>
-                  <DropdownMenuItem>
+                  <DropdownMenuItem className="cursor-pointer">
                     <Calendar className="mr-2 h-4 w-4 text-black" />
                     My Bookings
                   </DropdownMenuItem>
                   <DropdownMenuSeparator />
-                  <DropdownMenuItem>
+                  <DropdownMenuItem className="cursor-pointer">
                     <Settings className="mr-2 h-4 w-4 text-black" />
                     Settings
                   </DropdownMenuItem>
-                  <DropdownMenuItem>
+                  <DropdownMenuItem className="cursor-pointer">
                     <LogOut className="mr-2 h-4 w-4 text-black" />
                     Sign Out
                   </DropdownMenuItem>
