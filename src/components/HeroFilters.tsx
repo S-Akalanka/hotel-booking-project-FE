@@ -4,9 +4,15 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { Form, FormControl, FormField, FormItem } from "./ui/form";
 import { Input } from "./ui/input";
 import { Button } from "./ui/button";
-import { Sparkles } from "lucide-react";
+import {
+  MapPin,
+  Sparkles,
+  Calendar as CalendarIcon,
+  Users,
+  Search,
+  SlidersHorizontal,
+} from "lucide-react";
 import { useState } from "react";
-import { DevTool } from "@hookform/devtools";
 import { toast, Toaster } from "sonner";
 import {
   DropdownMenu,
@@ -40,7 +46,7 @@ const filterFormSchema = z.object({
 });
 
 export default function HeroFilters() {
-  const [aiInput, setAiInput] = useState(true);
+  const [aiInput, setAiInput] = useState(false);
 
   const aiSearchBtnHandler = () => {
     aiInput ? setAiInput(false) : setAiInput(true);
@@ -73,11 +79,29 @@ export default function HeroFilters() {
     }
   }
 
+  // common style
+  const filter =
+    "border-solid border-[0.2px] border-black text-black rounded-[0.5rem] py-7 max-[748px]:py-5 text-[1rem] max-[748px]:text-[0.7rem]";
+
   return (
     <>
       <div className="text-white">
-        <Button type="button" className="" onClick={aiSearchBtnHandler}>
-          <Sparkles /> AI Search
+        <Button
+          type="button"
+          className="switch-btn bg-white text-[1.1rem] text-black py-6 w-[140px] max-[748px]:w-[95px] max-[748px]:py-4 max-[748px]:text-[11px] rounded-3xl"
+          onClick={aiSearchBtnHandler}
+        >
+          {aiInput ? (
+            <>
+              {" "}
+              <SlidersHorizontal /> Filters{" "}
+            </>
+          ) : (
+            <>
+              {" "}
+              <Sparkles /> AI Search{" "}
+            </>
+          )}
         </Button>
       </div>
 
@@ -89,7 +113,7 @@ export default function HeroFilters() {
                 toast.error(errors.prompt.message);
               }
             })}
-            className=""
+            className="flex gap-3 mx-8"
           >
             <FormField
               control={aiForm.control}
@@ -97,36 +121,49 @@ export default function HeroFilters() {
               render={({ field }) => (
                 <FormItem>
                   <FormControl>
-                    <Input placeholder="Prompt" {...field} />
+                    <Input
+                      placeholder="Prompt"
+                      className="w-218 max-[748px]:w-100 max-[748px]:text- py-7 px-8 rounded-4xl border-solid border-[0.2px] border-black text-black bg-white flex"
+                      {...field}
+                    />
                   </FormControl>
                 </FormItem>
               )}
             />
-
-            <Button type="submit">Search</Button>
-            <DevTool control={aiForm.control} />
+            <Button
+              type="submit"
+              className="prompt-search-btn bg-yellow-400 w-28 max-[748px]:w-20 rounded-4xl border-solid border-[0.2px] border-black text-black py-7 text-[1rem]"
+            >
+              <Search />
+              Search
+            </Button>
           </form>
         </Form>
       ) : (
         <div>
           <Form {...filterForm}>
-            <form className="flex gap-10">
+            <form className="flex flex-wrap items-center justify-center gap-2.5 mx-8">
               <FormField
                 control={filterForm.control}
                 name="location"
                 render={({ field }) => (
-                  <FormItem>
+                  <FormItem className="filters">
                     <DropdownMenu>
                       <DropdownMenuTrigger asChild>
-                        <Button type="button">
-                          {field.value || "Select location"}
+                        <Button
+                          type="button"
+                          className={`${filter} location-btn bg-amber-200 w-56 max-[748px]:w-36 `}
+                        >
+                          <MapPin />
+                          {field.value || "Where to ?"}
                         </Button>
                       </DropdownMenuTrigger>
-                      <DropdownMenuContent>
+                      <DropdownMenuContent className="location-dropdown-content flex flex-col items-center rounded-[0.5rem] w-56 max-[748px]:w-36 py-[0.5rem] max-[748px]:py-[0.16rem] text-[1rem] max-[748px]:text-[0.7rem]">
                         {["Tokyo", "Osaka", "Nagoya"].map((city) => (
                           <DropdownMenuItem
                             key={city}
                             onClick={() => field.onChange(city)}
+                            className="location-dropdown cursor-pointer py-1 max-[748px]:py-0 w-54 max-[748px]:w-34 px-6 max-[748px]:px-3.5 rounded-[0.75rem]"
                           >
                             {city}
                           </DropdownMenuItem>
@@ -143,19 +180,20 @@ export default function HeroFilters() {
                 render={({ field }) => (
                   <FormItem>
                     <Popover>
-                      <PopoverTrigger>
-                        <Button type="button">
-                          {field.value
-                            ? field.value.toLocaleDateString()
-                            : "Select the date"}
-                        </Button>
+                      <PopoverTrigger
+                        className={`${filter} checkIn-btn bg-amber-100 w-52  max-[748px]:w-34 h-14 max-[748px]:h-10 flex justify-center items-center`}
+                      >
+                        <CalendarIcon size={15} className="m-2" />
+                        {field.value
+                          ? field.value.toLocaleDateString()
+                          : "Check-in Date"}
                       </PopoverTrigger>
                       <PopoverContent>
                         <Calendar
                           mode="single"
                           selected={field.value}
                           onSelect={(date) => field.onChange(date)}
-                          className="rounded-lg border bg-black "
+                          className="rounded-md border shadow-sm"
                         />
                       </PopoverContent>
                     </Popover>
@@ -169,19 +207,20 @@ export default function HeroFilters() {
                 render={({ field }) => (
                   <FormItem>
                     <Popover>
-                      <PopoverTrigger>
-                        <Button type="button">
-                          {field.value
-                            ? field.value.toLocaleDateString()
-                            : "Select the date"}
-                        </Button>
+                      <PopoverTrigger
+                        className={`${filter} checkout-btn bg-amber-100 w-52 max-[748px]:w-34 h-14 max-[748px]:h-10 flex justify-center items-center`}
+                      >
+                        <CalendarIcon size={15} className="m-2" />
+                        {field.value
+                          ? field.value.toLocaleDateString()
+                          : "Check-out date"}
                       </PopoverTrigger>
                       <PopoverContent>
                         <Calendar
                           mode="single"
                           selected={field.value}
                           onSelect={(date) => field.onChange(date)}
-                          className="rounded-lg border bg-black "
+                          className="rounded-md border shadow-sm"
                         />
                       </PopoverContent>
                     </Popover>
@@ -196,15 +235,20 @@ export default function HeroFilters() {
                   <FormItem>
                     <DropdownMenu>
                       <DropdownMenuTrigger asChild>
-                        <Button type="button">
+                        <Button
+                          type="button"
+                          className={`${filter} guest-btn bg-amber-50 w-48 max-[748px]:w-32`}
+                        >
+                          <Users />
                           {field.value || "Select guests"}
                         </Button>
                       </DropdownMenuTrigger>
-                      <DropdownMenuContent>
+                      <DropdownMenuContent className="guest-dropdown-content  flex flex-col items-center rounded-[0.5rem] py-[0.5rem] max-[748px]:py-[0.16rem] w-48 max-[748px]:w-32 text-[1rem] max-[748px]:text-[0.7rem]">
                         {[1, 2, 3].map((city) => (
                           <DropdownMenuItem
                             key={city}
                             onClick={() => field.onChange(city)}
+                            className="guest-dropdown cursor-pointer py-1 max-[748px]:py-0 text-center w-46 max-[748px]:w-29 rounded-[0.75rem]"
                           >
                             {city}
                           </DropdownMenuItem>
@@ -215,9 +259,13 @@ export default function HeroFilters() {
                 )}
               />
 
-              <Button type="submit">Search</Button>
-
-              <DevTool control={filterForm.control} />
+              <Button
+                type="submit"
+                className={`filter-search ${filter} filter-search bg-yellow-400 ml-3 w-28 max-[748px]:w-20 rounded-4xl`}
+              >
+                <Search />
+                Search
+              </Button>
             </form>
           </Form>
         </div>

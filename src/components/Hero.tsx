@@ -30,13 +30,13 @@ function Hero() {
         })}
       </div>
 
-      <div className="absolute top-1/4 left-1/9 text-white flex flex-col text-6xl gap-4">
+      <div className="hero-title absolute top-1/5 left-1/9 mr-[40px] text-white flex flex-col text-8xl gap-4">
         <span>Discover</span>
         <span>Your Perfect</span>
         <span>Luxury Escape</span>
       </div>
 
-      <div className="absolute top-[80%] left-1/9 text-white">
+      <div className="absolute inset-0 flex flex-col items-center justify-end mb-[5%] gap-5">
         <HeroFilters />
       </div>
     </div>
