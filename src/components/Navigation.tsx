@@ -25,6 +25,7 @@ import {
   SheetFooter,
 } from "@/components/ui/sheet";
 import { Button } from "./ui/button";
+import { Link } from "react-router";
 
 function Navigation() {
   const [isDark, setDark] = useState(false);
@@ -62,9 +63,9 @@ function Navigation() {
 
       {/* Center Logo */}
       <div className="center-logo flex justify-center text-white">
-        <a href="/">
+        <Link to="/">
           <img src={logo} alt="Logo" className="w-16" />
-        </a>
+        </Link>
       </div>
 
       {/* Right Nav */}
@@ -115,10 +116,10 @@ function Navigation() {
           ) : (
             <div className="flex items-center space-x-2">
               <Button className="sign-in-btn  bg-transparent size-[50px] cursor-pointer p-3 rounded-3xl min-w-24">
-                Sign In
+                <Link to={"/sign-in"}> Sign In</Link> 
               </Button>
               <Button className="sign-up-btn  size-[50px] cursor-pointer p-3 rounded-3xl min-w-24">
-                Sign Up
+                <Link to={"/sign-up"}> Sign Up</Link> 
               </Button>
             </div>
           )}
@@ -133,9 +134,9 @@ function Navigation() {
           </SheetTrigger>
           <SheetContent className="sheetContent w-60 border-none ">
             <ul className="text-white py-10 px-5 text-[24px] space-y-4">
-              <a href="#">
+              <Link to="/">
                 <img src={logo} alt="Logo" className="w-24 m-auto pb-5" />
-              </a>
+              </Link>
               <hr className="my-5"></hr>
               <li>
                 <a href="#" className="sheet-main-content">
@@ -205,13 +206,13 @@ function Navigation() {
                 <div className="flex items-center space-x-2">
                   <ul className="text-white m-auto pb-5 text-[1.25rem] space-y-7 flex flex-col items-center">
                     <li>
-                      <a href="#" className="sheet-signin py-3 px-5 rounded-4xl">
-                        Sign In</a>
+                      <Link to="/sign-in" className="sheet-signin py-3 px-5 rounded-4xl">
+                        Sign In</Link>
                     </li>
                     <li>
-                      <a href="#" className="sheet-signup py-3 px-5 rounded-4xl">
+                      <Link to="sign-up" className="sheet-signup py-3 px-5 rounded-4xl">
                         Sign Up
-                      </a>
+                      </Link>
                     </li>
                   </ul>
                 </div>
