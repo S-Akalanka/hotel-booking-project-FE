@@ -61,4 +61,52 @@ const destinations = [
   { name: "London", country: "UK", hotels: 198 },
 ];
 
-export { heroImages, hotels, destinations };
+  const bookings = [
+    {
+      id: 'GPH-2024-001',
+      hotel: 'The Grand Palace Hotel',
+      location: 'Manhattan, New York',
+      image: 'https://images.unsplash.com/photo-1647249893022-9287c83b8cc3?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxsdXh1cnklMjBob3RlbCUyMGxvYmJ5JTIwbW9kZXJufGVufDF8fHx8MTc1ODc1ODg2NHww&ixlib=rb-4.1.0&q=80&w=1080',
+      checkIn: '2024-12-15',
+      checkOut: '2024-12-18',
+      guests: 2,
+      rooms: 1,
+      roomType: 'Deluxe Suite',
+      amount: 1356,
+      status: 'confirmed',
+      paymentStatus: 'paid',
+      rating: 4.9
+    },
+    {
+      id: 'OVR-2024-002',
+      hotel: 'Ocean View Resort & Spa',
+      location: 'Malibu, California',
+      image: 'https://images.unsplash.com/photo-1729606188713-814d1b7bf893?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxob3RlbCUyMHBvb2wlMjBsdXh1cnklMjB2aWV3fGVufDF8fHx8MTc1ODg0NzU4MXww&ixlib=rb-4.1.0&q=80&w=1080',
+      checkIn: '2024-11-20',
+      checkOut: '2024-11-24',
+      guests: 2,
+      rooms: 1,
+      roomType: 'Ocean View Suite',
+      amount: 1520,
+      status: 'completed',
+      paymentStatus: 'paid',
+      rating: 4.8
+    },
+    {
+      id: 'MLR-2024-003',
+      hotel: 'Mountain Lodge Retreat',
+      location: 'Aspen, Colorado',
+      image: 'https://images.unsplash.com/photo-1758612853656-def5033bccb5?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxsdXh1cnklMjByZXNvcnQlMjBleHRlcmlvcnxlbnwxfHx8fDE3NTg4NDc1NzR8MA&ixlib=rb-4.1.0&q=80&w=1080',
+      checkIn: '2024-09-10',
+      checkOut: '2024-09-15',
+      guests: 4,
+      rooms: 2,
+      roomType: 'Mountain View Suite',
+      amount: 1920,
+      status: 'cancelled',
+      paymentStatus: 'refunded',
+      rating: null
+    }
+  ];
+
+export { heroImages, hotels, destinations, bookings };

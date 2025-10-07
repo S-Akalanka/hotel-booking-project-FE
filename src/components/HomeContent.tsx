@@ -1,7 +1,7 @@
 import { hotels, destinations } from "@/data";
 import { motion } from "motion/react";
 import { Button } from "./ui/button";
-import { Heart, Star, MapPin } from "lucide-react";
+import { Star, MapPin } from "lucide-react";
 import { Card, CardContent } from "./ui/card";
 import { ImageWithFallback } from "./ImageWithFallback";
 import { Badge } from "./ui/badge";
