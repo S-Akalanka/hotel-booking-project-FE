@@ -29,7 +29,7 @@ const hotels = [
     rating: 4.7,
     reviews: ["K", "L"],
     price: 160,
-    Facilities: ["Wifi", "Spa", "Pool", "Restaurant"],
+    amenities: ["Wifi", "Spa", "Pool", "Restaurant"],
   },
   {
     _id: "2",
@@ -39,7 +39,7 @@ const hotels = [
     rating: 4.7,
     reviews: ["K", "L"],
     price: 200,
-    Facilities: ["Pool", "Beach", "Spa", "Gym"],
+    amenities: ["Pool", "Beach", "Spa", "Gym"],
   },
   {
     _id: "3",
@@ -50,8 +50,15 @@ const hotels = [
     rating: 4.4,
     reviews: ["K", "L"],
     price: 250,
-    Facilities: ["Ski", "Fireplace", "Spa", "GyRestaurantm"],
+    amenities: ["Ski", "Fireplace", "Spa", "GyRestaurantm"],
   },
 ];
 
-export { heroImages, hotels };
+const destinations = [
+  { name: "Paris", country: "France", hotels: 245 },
+  { name: "Tokyo", country: "Japan", hotels: 189 },
+  { name: "New York", country: "USA", hotels: 312 },
+  { name: "London", country: "UK", hotels: 198 },
+];
+
+export { heroImages, hotels, destinations };
