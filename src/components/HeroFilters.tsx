@@ -244,13 +244,13 @@ export default function HeroFilters() {
                         </Button>
                       </DropdownMenuTrigger>
                       <DropdownMenuContent className="guest-dropdown-content  flex flex-col items-center rounded-[0.5rem] py-[0.5rem] max-[748px]:py-[0.16rem] w-48 max-[748px]:w-32 text-[1rem] max-[748px]:text-[0.7rem]">
-                        {[1, 2, 3].map((city) => (
+                        {[1, 2, 3, 4, 5].map((i) => (
                           <DropdownMenuItem
-                            key={city}
-                            onClick={() => field.onChange(city)}
+                            key={i}
+                            onClick={() => field.onChange(i)}
                             className="guest-dropdown cursor-pointer py-1 max-[748px]:py-0 text-center w-46 max-[748px]:w-29 rounded-[0.75rem]"
                           >
-                            {city}
+                            { i==1 ? `${i} Guest` : i===5 ? `${i}+ Guests`: `${i} Guests`}
                           </DropdownMenuItem>
                         ))}
                       </DropdownMenuContent>
