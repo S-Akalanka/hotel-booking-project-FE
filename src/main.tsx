@@ -8,6 +8,7 @@ import NotFoundPage from "./pages/Not-found.page";
 import SignInPage from "./pages/Sign-in.page";
 import SignUpPage from "./pages/Sign-up.page";
 import AccountPage from "./pages/Account.page"
+import BookingPage from "./pages/Booking.page";
 
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
@@ -18,6 +19,7 @@ createRoot(document.getElementById("root")!).render(
           <Route path="/sign-in" element={<SignInPage/>} />
           <Route path="/sign-up" element={<SignUpPage/>} />
           <Route path="/account" element={<AccountPage/>} />
+          <Route path="/booking" element={<BookingPage />} />
         </Route>
         <Route path="*" element={<NotFoundPage />} />
       </Routes>
