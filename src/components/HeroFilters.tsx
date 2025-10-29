@@ -23,6 +23,7 @@ import {
 import { Calendar } from "./ui/calendar";
 import { Popover } from "./ui/popover";
 import { PopoverContent, PopoverTrigger } from "@radix-ui/react-popover";
+import { useGetAllLocationsQuery } from "@/lib/api";
 
 const promptFormSchema = z.object({
   prompt: z.string().min(1, {
@@ -47,6 +48,13 @@ const filterFormSchema = z.object({
 
 export default function HeroFilters() {
   const [aiInput, setAiInput] = useState(false);
+
+  const {
+    data: locations = [],
+    isLoading: isLocationsLoading,
+    isError: isLocationsError,
+    error: locationsError,
+  } = useGetAllLocationsQuery(undefined);
 
   const aiSearchBtnHandler = () => {
     aiInput ? setAiInput(false) : setAiInput(true);
@@ -158,14 +166,14 @@ export default function HeroFilters() {
                           {field.value || "Where to ?"}
                         </Button>
                       </DropdownMenuTrigger>
-                      <DropdownMenuContent className="location-dropdown-content flex flex-col items-center rounded-[0.5rem] w-56 max-[748px]:w-36 py-[0.5rem] max-[748px]:py-[0.16rem] text-[1rem] max-[748px]:text-[0.7rem]">
-                        {["Tokyo", "Osaka", "Nagoya"].map((city) => (
+                      <DropdownMenuContent className="location-dropdown-content flex flex-col items-center rounded-[0.5rem] w-56 max-[748px]:w-36 py-[0.5rem] max-[748px]:py-[0.16rem] text-[1rem] max-[748px]:text-[0.7rem] overflow-auto max-h-72">
+                        {locations?.map((location:any) => (
                           <DropdownMenuItem
-                            key={city}
-                            onClick={() => field.onChange(city)}
+                            key={location.name}
+                            onClick={() => field.onChange(location.name)}
                             className="location-dropdown cursor-pointer py-1 max-[748px]:py-0 w-54 max-[748px]:w-34 px-6 max-[748px]:px-3.5 rounded-[0.75rem]"
                           >
-                            {city}
+                            {location.name}
                           </DropdownMenuItem>
                         ))}
                       </DropdownMenuContent>

@@ -11,9 +11,13 @@ import AccountPage from "./pages/Account.page"
 import BookingPage from "./pages/Booking.page";
 import HotelDetailsPage from "./pages/HotelDetails.page";
 import HotelsPage from "./pages/Hotels.page";
+import { Provider } from "react-redux";
+import { store } from "./lib/store";
+
 
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
+    <Provider store={store}>
     <BrowserRouter>
       <Routes>
         <Route path="/" element={<RootLayout />}>
@@ -28,5 +32,6 @@ createRoot(document.getElementById("root")!).render(
         <Route path="*" element={<NotFoundPage />} />
       </Routes>
     </BrowserRouter>
+    </Provider>
   </StrictMode>
 );

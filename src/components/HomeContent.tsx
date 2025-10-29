@@ -1,12 +1,35 @@
-import { hotels, destinations } from "@/data";
 import { motion } from "motion/react";
 import { Button } from "./ui/button";
 import { Star, MapPin } from "lucide-react";
 import { Card, CardContent } from "./ui/card";
 import { ImageWithFallback } from "./ImageWithFallback";
 import { Badge } from "./ui/badge";
+import { useGetAllHotelsQuery, useGetAllLocationsQuery } from "@/lib/api";
+import { Link } from "react-router";
 
 export default function HomeContent() {
+  const {
+    data: hotels,
+    isLoading: isHotelsLoading,
+    isError: isHotelsError,
+    error: hotelsError,
+  } = useGetAllHotelsQuery(undefined);
+
+  const {
+    data: locations,
+    isLoading: isLocationsLoading,
+    isError: isLocationsError,
+    error: locationsError,
+  } = useGetAllLocationsQuery(undefined);
+
+  const isLoading = isHotelsLoading || isLocationsLoading;
+  const isError = isHotelsError || isLocationsError;
+
+  if (isLoading) return <p>Loading...</p>;
+  if (isError) return <p>Error</p>;
+
+  console.log("Hotels data:", hotels);
+
   return (
     <main>
       {/* Featured Hotels */}
@@ -21,7 +44,7 @@ export default function HomeContent() {
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-          {hotels.map((hotel, index) => (
+          {hotels.map((hotel: any, index: number) => (
             <motion.div
               key={hotel._id}
               initial={{ opacity: 0, y: 30 }}
@@ -31,7 +54,7 @@ export default function HomeContent() {
               <Card className="py-0 overflow-hidden hover:shadow-2xl transition-shadow duration-300 group">
                 <div className="relative overflow-hidden">
                   <ImageWithFallback
-                    src={hotel.image}
+                    src={hotel.images[0]}
                     alt={hotel.name}
                     className="w-full h-64 object-cover group-hover:scale-105 transition-transform duration-300"
                   />
@@ -49,7 +72,7 @@ export default function HomeContent() {
                     {hotel.location}
                   </p>
                   <div className="flex flex-wrap gap-2 mb-4">
-                    {hotel.amenities.map((amenity) => (
+                    {hotel.amenities.map((amenity: any) => (
                       <Badge
                         key={amenity}
                         variant="secondary"
@@ -77,6 +100,12 @@ export default function HomeContent() {
         </div>
       </section>
 
+      <section className="pb-16 flex justify-center">
+        <Link to="/hotels">
+          <Button>View All</Button>
+        </Link>
+      </section>
+
       {/* Popular Destinations */}
       <section className="py-16 bg-secondary">
         <div className="max-w-7xl mx-auto px-4">
@@ -90,9 +119,9 @@ export default function HomeContent() {
           </div>
 
           <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
-            {destinations.map((destination, index) => (
+            {locations.map((location: any, index: number) => (
               <motion.div
-                key={destination.name}
+                key={location.name}
                 initial={{ opacity: 0, y: 30 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.6, delay: index * 0.1 }}
@@ -100,11 +129,11 @@ export default function HomeContent() {
               >
                 <div className="bg-card rounded-xl p-6 hover:shadow-lg transition-shadow duration-300">
                   <h3 className="font-semibold text-lg group-hover:text-[var(--luxury-gold)] transition-colors">
-                    {destination.name}
+                    {location.name}
                   </h3>
-                  <p className="text-muted-foreground">{destination.country}</p>
+                  <p className="text-muted-foreground">{location.country}</p>
                   <p className="text-sm text-muted-foreground mt-1">
-                    {destination.hotels} hotels
+                    {location.hotels} hotels
                   </p>
                 </div>
               </motion.div>

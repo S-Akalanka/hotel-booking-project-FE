@@ -2,6 +2,13 @@ const heroImages: string[] = [
   "https://images.pexels.com/photos/262047/pexels-photo-262047.jpeg",
   "https://images.unsplash.com/photo-1625244724120-1fd1d34d00f6?q=80&w=1740&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
   "https://images.unsplash.com/photo-1596436889106-be35e843f974?q=80&w=1740&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+  "https://images.pexels.com/photos/1001965/pexels-photo-1001965.jpeg"
+];
+
+const heroImagesAll: string[] = [
+  "https://images.pexels.com/photos/262047/pexels-photo-262047.jpeg",
+  "https://images.unsplash.com/photo-1625244724120-1fd1d34d00f6?q=80&w=1740&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+  "https://images.unsplash.com/photo-1596436889106-be35e843f974?q=80&w=1740&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
   "https://images.pexels.com/photos/1001965/pexels-photo-1001965.jpeg",
   "https://images.unsplash.com/photo-1596394516093-501ba68a0ba6?q=80&w=1740&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
   "https://images.pexels.com/photos/2883047/pexels-photo-2883047.jpeg",
