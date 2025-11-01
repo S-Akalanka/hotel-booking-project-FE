@@ -1,13 +1,15 @@
 import Hero from "@/components/Hero"
-import HomeContent from "@/components/HomeContent";
+import HotelListings from "@/components/HotelListings";
+import LocationListings from "@/components/LocationListings";
 
 function HomePage() {
 
   return (
-    <>
+    <main>
       <Hero/>
-      <HomeContent/>
-    </>
+      <HotelListings/>
+      <LocationListings/>
+    </main>
   )
 }
 
