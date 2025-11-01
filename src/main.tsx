@@ -25,9 +25,9 @@ createRoot(document.getElementById("root")!).render(
           <Route path="/sign-in" element={<SignInPage/>} />
           <Route path="/sign-up" element={<SignUpPage/>} />
           <Route path="/account" element={<AccountPage/>} />
-          <Route path="/booking" element={<BookingPage />} />
-          <Route path="/hotel-detail" element={<HotelDetailsPage />} />
           <Route path="/hotels" element={<HotelsPage />} />
+          <Route path="/hotels/:_id" element={<HotelDetailsPage />} />
+          <Route path="/hotels/:_id/book" element={<BookingPage />} />
         </Route>
         <Route path="*" element={<NotFoundPage />} />
       </Routes>

@@ -7,6 +7,9 @@ export const api = createApi({
         getAllHotels: build.query({
             query: ()=> 'hotels',
         }),
+        getHotelById: build.query({
+            query: (_id)=> `hotels/${_id}`
+        }),
         addHotel: build.mutation({
             query: (hotel)=>({
                 url: 'hotels',
@@ -20,4 +23,4 @@ export const api = createApi({
     })
 })
 
-export const { useGetAllHotelsQuery, useAddHotelMutation, useGetAllLocationsQuery } = api;
+export const { useGetAllHotelsQuery, useGetHotelByIdQuery, useAddHotelMutation, useGetAllLocationsQuery } = api;

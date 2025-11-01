@@ -1,16 +1,47 @@
-import { useState } from 'react';
-import { Button } from './ui/button';
-import { Input } from './ui/input';
-import { Card, CardContent } from './ui/card';
-import { Badge } from './ui/badge';
-import { Slider } from './ui/slider';
-import { Checkbox } from './ui/checkbox';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from './ui/select';
-import { Sheet, SheetContent, SheetTrigger } from './ui/sheet';
-import { Pagination, PaginationContent, PaginationItem, PaginationLink, PaginationNext, PaginationPrevious } from './ui/pagination';
-import { ImageWithFallback } from './ImageWithFallback';
-import { Search, Filter, Grid, List, MapPin, Star, Heart, Wifi, Car, Utensils, Waves, Dumbbell, Coffee, Bed, Users } from 'lucide-react';
-import { motion } from 'motion/react';
+import { useState } from "react";
+import { Button } from "./ui/button";
+import { Input } from "./ui/input";
+import { Card, CardContent } from "./ui/card";
+import { Badge } from "./ui/badge";
+import { Slider } from "./ui/slider";
+import { Checkbox } from "./ui/checkbox";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "./ui/select";
+import { Sheet, SheetContent, SheetTrigger } from "./ui/sheet";
+import {
+  Pagination,
+  PaginationContent,
+  PaginationItem,
+  PaginationLink,
+  PaginationNext,
+  PaginationPrevious,
+} from "./ui/pagination";
+import { ImageWithFallback } from "./ImageWithFallback";
+import {
+  Search,
+  Filter,
+  Grid,
+  List,
+  MapPin,
+  Star,
+  Heart,
+  Wifi,
+  Car,
+  Utensils,
+  Waves,
+  Dumbbell,
+  Coffee,
+  Bed,
+  Users,
+} from "lucide-react";
+import { motion } from "motion/react";
+import { useGetAllHotelsQuery } from "@/lib/api";
+import { Link } from "react-router";
 
 // interface HotelsPageProps {
 //   onPageChange: (page: string) => void;
@@ -18,78 +49,19 @@ import { motion } from 'motion/react';
 
 // export function HotelsPage({ onPageChange }: HotelsPageProps) {
 export function HotelsContent() {
-  const [viewMode, setViewMode] = useState<'grid' | 'list'>('grid');
+  const [viewMode, setViewMode] = useState<"grid" | "list">("grid");
   const [priceRange, setPriceRange] = useState([100, 800]);
-  const [selectedRating, setSelectedRating] = useState<string>('');
+  const [selectedRating, setSelectedRating] = useState<string>("");
   const [selectedAmenities, setSelectedAmenities] = useState<string[]>([]);
-  const [sortBy, setSortBy] = useState('recommended');
+  const [sortBy, setSortBy] = useState("recommended");
   const [currentPage, setCurrentPage] = useState(1);
 
-  const hotels = [
-    {
-      id: 1,
-      name: 'The Grand Palace Hotel',
-      location: 'Manhattan, New York',
-      rating: 4.9,
-      reviews: 234,
-      price: 450,
-      originalPrice: 520,
-      image: 'https://images.unsplash.com/photo-1647249893022-9287c83b8cc3?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxsdXh1cnklMjBob3RlbCUyMGxvYmJ5JTIwbW9kZXJufGVufDF8fHx8MTc1ODc1ODg2NHww&ixlib=rb-4.1.0&q=80&w=1080',
-      amenities: ['Wifi', 'Spa', 'Pool', 'Restaurant', 'Gym', 'Parking'],
-      description: 'Luxury 5-star hotel in the heart of Manhattan with world-class amenities',
-      images: [
-        'https://images.unsplash.com/photo-1647249893022-9287c83b8cc3?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxsdXh1cnklMjBob3RlbCUyMGxvYmJ5JTIwbW9kZXJufGVufDF8fHx8MTc1ODc1ODg2NHww&ixlib=rb-4.1.0&q=80&w=1080',
-        'https://images.unsplash.com/photo-1685592437742-3b56edb46b15?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxsdXh1cnklMjBob3RlbCUyMHJvb20lMjBzdWl0ZXxlbnwxfHx8fDE3NTg3NjI0ODV8MA&ixlib=rb-4.1.0&q=80&w=1080',
-        'https://images.unsplash.com/photo-1631655376078-b6319604bd17?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxib3V0aXF1ZSUyMGhvdGVsJTIwcmVzdGF1cmFudHxlbnwxfHx8fDE3NTg4NDc1Nzd8MA&ixlib=rb-4.1.0&q=80&w=1080'
-      ]
-    },
-    {
-      id: 2,
-      name: 'Ocean View Resort & Spa',
-      location: 'Malibu, California',
-      rating: 4.8,
-      reviews: 156,
-      price: 380,
-      originalPrice: 420,
-      image: 'https://images.unsplash.com/photo-1729606188713-814d1b7bf893?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxob3RlbCUyMHBvb2wlMjBsdXh1cnklMjB2aWV3fGVufDF8fHx8MTc1ODg0NzU4MXww&ixlib=rb-4.1.0&q=80&w=1080',
-      amenities: ['Pool', 'Beach', 'Spa', 'Gym', 'Restaurant', 'Wifi'],
-      description: 'Beachfront luxury resort with stunning ocean views and world-class spa',
-      images: [
-        'https://images.unsplash.com/photo-1729606188713-814d1b7bf893?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxob3RlbCUyMHBvb2wlMjBsdXh1cnklMjB2aWV3fGVufDF8fHx8MTc1ODg0NzU4MXww&ixlib=rb-4.1.0&q=80&w=1080',
-        'https://images.unsplash.com/photo-1667235195726-a7c440bca9bd?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxsdXh1cnklMjBob3RlbCUyMHNwYSUyMHdlbGxuZXNzfGVufDF8fHx8MTc1ODc2ODM1NXww&ixlib=rb-4.1.0&q=80&w=1080'
-      ]
-    },
-    {
-      id: 3,
-      name: 'Mountain Lodge Retreat',
-      location: 'Aspen, Colorado',
-      rating: 4.7,
-      reviews: 89,
-      price: 320,
-      originalPrice: 360,
-      image: 'https://images.unsplash.com/photo-1758612853656-def5033bccb5?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxsdXh1cnklMjByZXNvcnQlMjBleHRlcmlvcnxlbnwxfHx8fDE3NTg4NDc1NzR8MA&ixlib=rb-4.1.0&q=80&w=1080',
-      amenities: ['Ski', 'Fireplace', 'Spa', 'Restaurant', 'Wifi', 'Parking'],
-      description: 'Cozy mountain retreat perfect for ski enthusiasts and nature lovers',
-      images: [
-        'https://images.unsplash.com/photo-1758612853656-def5033bccb5?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxsdXh1cnklMjByZXNvcnQlMjBleHRlcmlvcnxlbnwxfHx8fDE3NTg4NDc1NzR8MA&ixlib=rb-4.1.0&q=80&w=1080'
-      ]
-    },
-    {
-      id: 4,
-      name: 'Urban Boutique Hotel',
-      location: 'SoHo, New York',
-      rating: 4.6,
-      reviews: 312,
-      price: 280,
-      originalPrice: 320,
-      image: 'https://images.unsplash.com/photo-1631655376078-b6319604bd17?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxib3V0aXF1ZSUyMGhvdGVsJTIwcmVzdGF1cmFudHxlbnwxfHx8fDE3NTg4NDc1Nzd8MA&ixlib=rb-4.1.0&q=80&w=1080',
-      amenities: ['Wifi', 'Restaurant', 'Bar', 'Concierge', 'Gym'],
-      description: 'Chic boutique hotel in trendy SoHo with modern design and amenities',
-      images: [
-        'https://images.unsplash.com/photo-1631655376078-b6319604bd17?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxib3V0aXF1ZSUyMGhvdGVsJTIwcmVzdGF1cmFudHxlbnwxfHx8fDE3NTg4NDc1Nzd8MA&ixlib=rb-4.1.0&q=80&w=1080'
-      ]
-    }
-  ];
+  const {
+    data: hotels = [],
+    isLoading: isHotelsLoading,
+    isError: isHotelsError,
+    error: hotelsError,
+  } = useGetAllHotelsQuery(undefined);
 
   const amenityIcons = {
     Wifi: Wifi,
@@ -102,15 +74,27 @@ export function HotelsContent() {
     Ski: Car,
     Fireplace: Coffee,
     Bar: Coffee,
-    Concierge: Users
+    Concierge: Users,
   };
 
-  const amenityOptions = ['Wifi', 'Spa', 'Pool', 'Restaurant', 'Gym', 'Parking', 'Beach', 'Bar'];
+  const amenityOptions = [
+    "Wifi",
+    "Spa",
+    "Pool",
+    "Restaurant",
+    "Gym",
+    "Parking",
+    "Beach",
+    "Ski",
+    "Fireplace",
+    "Bar",
+    "Concierge",
+  ];
 
   const handleAmenityToggle = (amenity: string) => {
-    setSelectedAmenities(prev =>
+    setSelectedAmenities((prev) =>
       prev.includes(amenity)
-        ? prev.filter(a => a !== amenity)
+        ? prev.filter((a) => a !== amenity)
         : [...prev, amenity]
     );
   };
@@ -137,7 +121,10 @@ export function HotelsContent() {
         <h3 className="font-semibold mb-4">Rating</h3>
         <div className="space-y-2">
           {[4.5, 4.0, 3.5, 3.0].map((rating) => (
-            <label key={rating} className="flex items-center space-x-2 cursor-pointer">
+            <label
+              key={rating}
+              className="flex items-center space-x-2 cursor-pointer"
+            >
               <Checkbox
                 checked={selectedRating === rating.toString()}
                 onCheckedChange={() => setSelectedRating(rating.toString())}
@@ -155,9 +142,13 @@ export function HotelsContent() {
         <h3 className="font-semibold mb-4">Amenities</h3>
         <div className="space-y-2">
           {amenityOptions.map((amenity) => {
-            const IconComponent = amenityIcons[amenity as keyof typeof amenityIcons];
+            const IconComponent =
+              amenityIcons[amenity as keyof typeof amenityIcons];
             return (
-              <label key={amenity} className="flex items-center space-x-2 cursor-pointer">
+              <label
+                key={amenity}
+                className="flex items-center space-x-2 cursor-pointer"
+              >
                 <Checkbox
                   checked={selectedAmenities.includes(amenity)}
                   onCheckedChange={() => handleAmenityToggle(amenity)}
@@ -178,39 +169,29 @@ export function HotelsContent() {
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.6, delay: index * 0.1 }}
     >
-      <Card className={`overflow-hidden hover:shadow-2xl transition-all duration-300 group ${
-        viewMode === 'list' ? 'flex flex-row' : ''
-      }`}>
-        <div className={`relative overflow-hidden ${
-          viewMode === 'list' ? 'w-80 flex-shrink-0' : ''
-        }`}>
+      <Card
+        className={`overflow-hidden hover:shadow-2xl transition-all duration-300 group ${
+          viewMode === "list" ? "flex flex-row" : ""
+        }`}
+      >
+        <div
+          className={`relative overflow-hidden ${
+            viewMode === "list" ? "w-80 flex-shrink-0" : ""
+          }`}
+        >
           <ImageWithFallback
-            src={hotel.image}
+            src={hotel.images[0]}
             alt={hotel.name}
             className={`object-cover group-hover:scale-105 transition-transform duration-300 ${
-              viewMode === 'list' ? 'w-full h-full' : 'w-full h-64'
+              viewMode === "list" ? "w-full h-full" : "w-full h-64"
             }`}
           />
-          <Button
-            variant="ghost"
-            size="sm"
-            className="absolute top-4 right-4 bg-white/80 hover:bg-white"
-          >
-            <Heart className="h-4 w-4" />
-          </Button>
           <div className="absolute bottom-4 left-4">
             <Badge className="bg-black/70 text-white border-0">
               <Star className="w-3 h-3 mr-1 fill-yellow-400 text-yellow-400" />
               {hotel.rating}
             </Badge>
           </div>
-          {hotel.originalPrice > hotel.price && (
-            <div className="absolute top-4 left-4">
-              <Badge className="bg-red-500 text-white border-0">
-                Save ${hotel.originalPrice - hotel.price}
-              </Badge>
-            </div>
-          )}
         </div>
 
         <CardContent className="p-6 flex-1">
@@ -219,11 +200,6 @@ export function HotelsContent() {
               {hotel.name}
             </h3>
             <div className="text-right">
-              {hotel.originalPrice > hotel.price && (
-                <div className="text-sm text-muted-foreground line-through">
-                  ${hotel.originalPrice}
-                </div>
-              )}
               <div className="text-2xl font-semibold">${hotel.price}</div>
               <div className="text-sm text-muted-foreground">per night</div>
             </div>
@@ -240,23 +216,36 @@ export function HotelsContent() {
                 <Star
                   key={i}
                   className={`w-4 h-4 ${
-                    i < Math.floor(hotel.rating) ? 'text-yellow-400 fill-current' : 'text-gray-300'
+                    i < Math.floor(hotel.rating)
+                      ? "text-yellow-400 fill-current"
+                      : "text-gray-300"
                   }`}
                 />
               ))}
             </div>
-            <span className="ml-2 text-sm text-muted-foreground">({hotel.reviews} reviews)</span>
+            <span className="ml-2 text-sm text-muted-foreground">
+              ({hotel.reviews.length} reviews)
+            </span>
           </div>
 
-          <p className="text-sm text-muted-foreground mb-4">{hotel.description}</p>
+          <p className="text-sm text-muted-foreground mb-4">
+            {hotel.description}
+          </p>
 
           <div className="flex flex-wrap gap-2 mb-4">
-            {hotel.amenities.slice(0, 4).map((amenity: string) => {
-              const IconComponent = amenityIcons[amenity as keyof typeof amenityIcons];
+            {hotel.amenities.slice(0, 4).map((amenity: any) => {
+              const IconComponent =
+                amenityIcons[amenity.name as keyof typeof amenityIcons];
               return (
-                <Badge key={amenity} variant="secondary" className="text-xs flex items-center">
-                  <IconComponent className="w-3 h-3 mr-1" />
-                  {amenity}
+                <Badge
+                  key={amenity.name}
+                  variant="secondary"
+                  className="text-xs flex items-center"
+                >
+                  {IconComponent ? (
+                    <IconComponent className="w-3 h-3 mr-1" />
+                  ) : null}
+                  {amenity.name}
                 </Badge>
               );
             })}
@@ -268,18 +257,23 @@ export function HotelsContent() {
           </div>
 
           <div className="flex gap-2">
-            <Button 
-              variant="outline" 
+            <Button
+              asChild
+              variant="outline"
               className="flex-1"
-            //   onClick={() => onPageChange('hotel-detail')}
+              //   onClick={() => onPageChange('hotel-detail')}
             >
-              View Details
+              <Link to={`/hotels/${hotel._id}`}>
+                View Details
+              </Link>
             </Button>
-            <Button 
+            <Button
               className="flex-1 luxury-gradient border-0"
-            //   onClick={() => onPageChange('booking')}
+              //   onClick={() => onPageChange('booking')}
             >
-              Book Now
+              <Link to={`/hotels/${hotel._id}/book`}>
+                Book Now
+              </Link>
             </Button>
           </div>
         </CardContent>
@@ -292,7 +286,9 @@ export function HotelsContent() {
       {/* Header */}
       <div className="py-8 bg-gray-400 pt-30">
         <div className="max-w-7xl mx-auto px-4">
-          <h1 className="font-playfair text-3xl md:text-4xl mb-4">Find Your Perfect Stay</h1>
+          <h1 className="font-playfair text-3xl md:text-4xl mb-4">
+            Find Your Perfect Stay
+          </h1>
           <div className="flex flex-col md:flex-row gap-4 items-center justify-between">
             <div className="relative flex-1 max-w-md">
               <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-4 w-4" />
@@ -315,17 +311,17 @@ export function HotelsContent() {
               </Select>
               <div className="flex border rounded-lg">
                 <Button
-                  variant={viewMode === 'grid' ? 'default' : 'ghost'}
+                  variant={viewMode === "grid" ? "default" : "ghost"}
                   size="sm"
-                  onClick={() => setViewMode('grid')}
+                  onClick={() => setViewMode("grid")}
                   className="rounded-r-none"
                 >
                   <Grid className="h-4 w-4" />
                 </Button>
                 <Button
-                  variant={viewMode === 'list' ? 'default' : 'ghost'}
+                  variant={viewMode === "list" ? "default" : "ghost"}
                   size="sm"
-                  onClick={() => setViewMode('list')}
+                  onClick={() => setViewMode("list")}
                   className="rounded-l-none"
                 >
                   <List className="h-4 w-4" />
@@ -343,7 +339,9 @@ export function HotelsContent() {
             <Card className="p-6 sticky top-24">
               <div className="flex items-center justify-between mb-6">
                 <h2 className="font-semibold text-lg">Filters</h2>
-                <Button variant="ghost" size="sm">Clear All</Button>
+                <Button variant="ghost" size="sm">
+                  Clear All
+                </Button>
               </div>
               <FilterSidebar />
             </Card>
@@ -351,7 +349,10 @@ export function HotelsContent() {
 
           {/* Mobile Filter Sheet */}
           <Sheet>
-            <SheetTrigger asChild className="lg:hidden fixed bottom-4 right-4 z-50">
+            <SheetTrigger
+              asChild
+              className="lg:hidden fixed bottom-4 right-4 z-50"
+            >
               <Button className="rounded-full w-14 h-14 luxury-gradient border-0">
                 <Filter className="h-6 w-6" />
               </Button>
@@ -372,11 +373,15 @@ export function HotelsContent() {
               </p>
             </div>
 
-            <div className={`gap-6 ${
-              viewMode === 'grid' ? 'grid grid-cols-1 xl:grid-cols-2' : 'space-y-6'
-            }`}>
-              {hotels.map((hotel, index) => (
-                <HotelCard key={hotel.id} hotel={hotel} index={index} />
+            <div
+              className={`gap-6 ${
+                viewMode === "grid"
+                  ? "grid grid-cols-1 xl:grid-cols-2"
+                  : "space-y-6"
+              }`}
+            >
+              {hotels.map((hotel: any, index: number) => (
+                <HotelCard key={hotel._id} hotel={hotel} index={index} />
               ))}
             </div>
 
@@ -388,7 +393,9 @@ export function HotelsContent() {
                     <PaginationPrevious href="#" />
                   </PaginationItem>
                   <PaginationItem>
-                    <PaginationLink href="#" isActive>1</PaginationLink>
+                    <PaginationLink href="#" isActive>
+                      1
+                    </PaginationLink>
                   </PaginationItem>
                   <PaginationItem>
                     <PaginationLink href="#">2</PaginationLink>

@@ -21,6 +21,8 @@ import {
   Star,
 } from 'lucide-react';
 import { motion } from 'motion/react';
+import { useParams } from 'react-router';
+import { useGetHotelByIdQuery } from '@/lib/api';
 
 // interface BookingPageProps {
 //   onPageChange: (page: string) => void;
@@ -42,13 +44,17 @@ export function BookingContent() {
   const [isProcessing, setIsProcessing] = useState(false);
   const [bookingComplete, setBookingComplete] = useState(false);
 
-  const hotel = {
-    name: 'The Grand Palace Hotel',
-    location: 'Manhattan, New York',
-    rating: 4.9,
-    image: 'https://images.unsplash.com/photo-1647249893022-9287c83b8cc3?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxsdXh1cnklMjBob3RlbCUyMGxvYmJ5JTIwbW9kZXJufGVufDF8fHx8MTc1ODc1ODg2NHww&ixlib=rb-4.1.0&q=80&w=1080',
-    amenities: ['Free WiFi', 'Spa', 'Pool', 'Restaurant']
-  };
+  const { _id } = useParams();
+
+  const { 
+    data: hotel, 
+    isLoading, 
+    isError, 
+    error 
+  } = useGetHotelByIdQuery(_id);
+
+  if (isLoading) return <div>Loading hotel...</div>;
+  if (isError || !hotel) return <div>Error loading hotel</div>;
 
   const bookingDetails = {
     checkIn: new Date('2024-12-15'),
@@ -58,31 +64,7 @@ export function BookingContent() {
     nights: 3
   };
 
-  const roomTypes = [
-    {
-      id: 'standard',
-      name: 'Standard Room',
-      description: 'Comfortable room with city view',
-      price: 320,
-      features: ['City View', '25 sqm', 'Queen Bed', 'Work Desk']
-    },
-    {
-      id: 'deluxe',
-      name: 'Deluxe Suite',
-      description: 'Spacious suite with premium amenities',
-      price: 450,
-      features: ['Park View', '45 sqm', 'King Bed', 'Living Area', 'Minibar']
-    },
-    {
-      id: 'presidential',
-      name: 'Presidential Suite',
-      description: 'Ultimate luxury with panoramic views',
-      price: 850,
-      features: ['Panoramic View', '85 sqm', 'King Bed', 'Separate Living Room', 'Butler Service']
-    }
-  ];
-
-  const selectedRoom = roomTypes.find(room => room.id === roomType);
+  const selectedRoom = hotel.roomTypes.find((room:any) => room.id === roomType);
   const subtotal = selectedRoom ? selectedRoom.price * bookingDetails.nights * bookingDetails.rooms : 0;
   const taxes = Math.round(subtotal * 0.12);
   const total = subtotal + taxes;
@@ -276,7 +258,7 @@ export function BookingContent() {
                   </CardHeader>
                   <CardContent>
                     <RadioGroup value={roomType} onValueChange={setRoomType} className="space-y-4">
-                      {roomTypes.map((room) => (
+                      {hotel.roomTypes.map((room:any) => (
                         <div key={room.id} className="flex items-start space-x-3 p-4 border rounded-lg cursor-pointer hover:bg-secondary">
                           <RadioGroupItem value={room.id} id={room.id} className="mt-1" />
                           <div className="flex-1">
@@ -292,7 +274,7 @@ export function BookingContent() {
                                 </div>
                               </div>
                               <div className="flex flex-wrap gap-2">
-                                {room.features.map((feature) => (
+                                {room.features.map((feature:string) => (
                                   <Badge key={feature} variant="secondary" className="text-xs">
                                     {feature}
                                   </Badge>
@@ -467,7 +449,7 @@ export function BookingContent() {
                 {/* Hotel Info */}
                 <div className="flex space-x-3">
                   <ImageWithFallback
-                    src={hotel.image}
+                    src={hotel.images[0]}
                     alt={hotel.name}
                     className="w-16 h-16 rounded-lg object-cover"
                   />
@@ -555,9 +537,9 @@ export function BookingContent() {
                 <div>
                   <h4 className="font-semibold mb-2">Included Amenities</h4>
                   <div className="flex flex-wrap gap-2">
-                    {hotel.amenities.map((amenity) => (
-                      <Badge key={amenity} variant="secondary" className="text-xs">
-                        {amenity}
+                    {hotel.amenities.map((amenity:any) => (
+                      <Badge key={amenity.name} variant="secondary" className="text-xs">
+                        {amenity.name}
                       </Badge>
                     ))}
                   </div>

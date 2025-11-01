@@ -115,7 +115,7 @@ function Navigation() {
             </div>
           ) : (
             <div className="flex items-center space-x-2">
-              <Button className="sign-in-btn  bg-transparent size-[50px] cursor-pointer p-3 rounded-3xl min-w-24">
+              <Button asChild className="sign-in-btn  bg-transparent size-[50px] cursor-pointer p-3 rounded-3xl min-w-24">
                 <Link to={"/sign-in"}> Sign In</Link> 
               </Button>
               <Button className="sign-up-btn  size-[50px] cursor-pointer p-3 rounded-3xl min-w-24">

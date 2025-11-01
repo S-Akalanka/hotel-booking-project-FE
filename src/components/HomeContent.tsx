@@ -9,14 +9,14 @@ import { Link } from "react-router";
 
 export default function HomeContent() {
   const {
-    data: hotels,
+    data: hotels = [],
     isLoading: isHotelsLoading,
     isError: isHotelsError,
     error: hotelsError,
   } = useGetAllHotelsQuery(undefined);
 
   const {
-    data: locations,
+    data: locations = [],
     isLoading: isLocationsLoading,
     isError: isLocationsError,
     error: locationsError,
@@ -74,11 +74,11 @@ export default function HomeContent() {
                   <div className="flex flex-wrap gap-2 mb-4">
                     {hotel.amenities.map((amenity: any) => (
                       <Badge
-                        key={amenity}
+                        key={amenity.name}
                         variant="secondary"
                         className="text-xs"
                       >
-                        {amenity}
+                        {amenity.name}
                       </Badge>
                     ))}
                   </div>
@@ -89,8 +89,8 @@ export default function HomeContent() {
                       </span>
                       <span className="text-muted-foreground">/night</span>
                     </div>
-                    <Button className="luxury-gradient border-0">
-                      View Details
+                    <Button asChild className="luxury-gradient border-0">
+                      <Link to={`/hotels/${hotel._id}`}>View Details</Link>
                     </Button>
                   </div>
                 </CardContent>
