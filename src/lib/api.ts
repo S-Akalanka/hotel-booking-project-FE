@@ -1,8 +1,24 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react'
 
 export const api = createApi({
-    reducerPath: 'api',
-    baseQuery: fetchBaseQuery({ baseUrl: 'http://localhost:8000/api/' }),
+  reducerPath: 'api',
+  baseQuery: fetchBaseQuery({ 
+    baseUrl: 'http://localhost:8000/api/', 
+  prepareHeaders: async (headers) => {
+    // Wait until Clerk is loaded
+    if (window.Clerk && window.Clerk.session) {
+      try {
+        const token = await window.Clerk.session.getToken();
+        if (token) {
+          headers.set("Authorization", `Bearer ${token}`);
+        }
+      } catch (err) {
+        console.error("Failed to get Clerk token:", err);
+      }
+    }
+    return headers;
+  },
+}),
     endpoints: (build) => ({
         getAllHotels: build.query({
             query: ()=> 'hotels',
