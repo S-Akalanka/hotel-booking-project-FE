@@ -15,7 +15,7 @@ import { Separator } from "./ui/separator";
 import { ImageWithFallback } from "./ImageWithFallback";
 import { iconMap } from "@/utils/iconMap";
 import { motion } from "motion/react";
-import { Link, useParams } from "react-router";
+import { Link, useNavigate, useParams } from "react-router";
 import { useGetHotelByIdQuery } from "@/lib/api";
 import {
   CalendarIcon,
@@ -25,6 +25,8 @@ import {
   Phone,
   Star,
 } from "lucide-react";
+import { useDispatch } from "react-redux";
+import { setBookingDetails } from "@/lib/features/bookingSlice";
 
 // interface HotelDetailPageProps {
 //   onPageChange: (page: string) => void;
@@ -33,20 +35,29 @@ import {
 // export function HotelDetailPage({ onPageChange }: HotelDetailPageProps) {
 export function HotelDetailsContent() {
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
-  const [checkIn, setCheckIn] = useState<Date>();
-  const [checkOut, setCheckOut] = useState<Date>();
-  const [guests, setGuests] = useState("2");
+  const [checkInDate, setcheckInDate] = useState<Date>();
+  const [checkOutDate, setcheckOutDate] = useState<Date>();
+  const [noOfGuests, setnoOfGuests] = useState("2");
   const [rooms, setRooms] = useState("1");
 
   const { _id } = useParams();
 
-  const { 
-    data: hotel, 
-    isLoading, 
-    isError, 
-    error 
-  } = useGetHotelByIdQuery(_id);
+  const { data: hotel, isLoading, isError, error } = useGetHotelByIdQuery(_id);
 
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+
+  const handleProceedToPayment = () => {
+    dispatch(
+      setBookingDetails({
+        checkInDate: checkInDate ? checkInDate.toISOString() : null,
+        checkOutDate: checkOutDate ? checkOutDate.toISOString() : null,
+        rooms,
+        noOfGuests,
+      })
+    );
+    navigate(`book`);
+  };
 
   if (isLoading) {
     return <div className="text-center py-10">Loading hotel details...</div>;
@@ -75,8 +86,8 @@ export function HotelDetailsContent() {
   };
 
   const calculateNights = () => {
-    if (checkIn && checkOut) {
-      const diffTime = Math.abs(checkOut.getTime() - checkIn.getTime());
+    if (checkInDate && checkOutDate) {
+      const diffTime = Math.abs(checkOutDate.getTime() - checkInDate.getTime());
       const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
       return diffDays;
     }
@@ -220,7 +231,7 @@ export function HotelDetailsContent() {
             >
               <h2 className="font-playfair text-2xl mb-6">Amenities</h2>
               <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-                {hotel.amenities.map((amenity:any, index:number) => {
+                {hotel.amenities.map((amenity: any, index: number) => {
                   const Icon = iconMap[amenity.icon]; // look up the component
                   return (
                     <div key={index} className="flex items-center space-x-3">
@@ -266,14 +277,16 @@ export function HotelDetailsContent() {
                             className="w-full justify-start"
                           >
                             <CalendarIcon className="mr-2 h-4 w-4" />
-                            {checkIn ? checkIn.toDateString() : "Select date"}
+                            {checkInDate
+                              ? checkInDate.toDateString()
+                              : "Select date"}
                           </Button>
                         </PopoverTrigger>
                         <PopoverContent className="w-auto p-0" align="start">
                           <Calendar
                             mode="single"
-                            selected={checkIn}
-                            onSelect={setCheckIn}
+                            selected={checkInDate}
+                            onSelect={setcheckInDate}
                           />
                         </PopoverContent>
                       </Popover>
@@ -289,14 +302,16 @@ export function HotelDetailsContent() {
                             className="w-full justify-start"
                           >
                             <CalendarIcon className="mr-2 h-4 w-4" />
-                            {checkOut ? checkOut.toDateString() : "Select date"}
+                            {checkOutDate
+                              ? checkOutDate.toDateString()
+                              : "Select date"}
                           </Button>
                         </PopoverTrigger>
                         <PopoverContent className="w-auto p-0" align="start">
                           <Calendar
                             mode="single"
-                            selected={checkOut}
-                            onSelect={setCheckOut}
+                            selected={checkOutDate}
+                            onSelect={setcheckOutDate}
                           />
                         </PopoverContent>
                       </Popover>
@@ -309,7 +324,7 @@ export function HotelDetailsContent() {
                       <label className="text-sm font-semibold mb-2 block">
                         Guests
                       </label>
-                      <Select value={guests} onValueChange={setGuests}>
+                      <Select value={noOfGuests} onValueChange={setnoOfGuests}>
                         <SelectTrigger>
                           <SelectValue />
                         </SelectTrigger>
@@ -341,7 +356,7 @@ export function HotelDetailsContent() {
                   </div>
 
                   {/* Price Breakdown */}
-                  {checkIn && checkOut && (
+                  {checkInDate && checkOutDate && (
                     <div className="space-y-3 p-4 bg-secondary rounded-lg">
                       <div className="flex justify-between">
                         <span>
@@ -368,13 +383,10 @@ export function HotelDetailsContent() {
 
                   {/* Book Button */}
                   <Button
-                    asChild
                     className="w-full luxury-gradient border-0 h-12"
-                    //   onClick={() => onPageChange('booking')}
+                    onClick={handleProceedToPayment}
                   >
-                    <Link to={`/hotels/${hotel._id}/book`}>
-                      Book Now
-                    </Link>
+                    Book Now
                   </Button>
 
                   <div className="text-center">

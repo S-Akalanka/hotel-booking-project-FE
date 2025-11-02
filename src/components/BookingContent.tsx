@@ -22,7 +22,9 @@ import {
 } from 'lucide-react';
 import { motion } from 'motion/react';
 import { useParams } from 'react-router';
-import { useGetHotelByIdQuery } from '@/lib/api';
+import { useCreateBookingMutation, useGetHotelByIdQuery } from '@/lib/api';
+import { useSelector } from 'react-redux';
+import { useUser } from '@clerk/clerk-react';
 
 // interface BookingPageProps {
 //   onPageChange: (page: string) => void;
@@ -53,15 +55,59 @@ export function BookingContent() {
     error 
   } = useGetHotelByIdQuery(_id);
 
+  const [createBooking, { isLoading: isCreateBookingLoading }] = useCreateBookingMutation();
+
   if (isLoading) return <div>Loading hotel...</div>;
   if (isError || !hotel) return <div>Error loading hotel</div>;
 
+
+  const { checkInDate, checkOutDate, rooms, noOfGuests } = useSelector(
+    (state:any) => state.booking
+  );
+
+  if (!checkInDate || !checkOutDate) {
+    return <p>No booking data found. Please go back to booking page.</p>;
+  }
+
+  const calculateNights = (checkInDate: Date | string | null, checkOutDate: Date | string | null): number => {
+  if (!checkInDate || !checkOutDate) return 0;
+
+  const checkIn = new Date(checkInDate);
+  const checkOut = new Date(checkOutDate);
+
+  // Normalize both dates to midnight to ignore hours/minutes/seconds
+  checkIn.setHours(0, 0, 0, 0);
+  checkOut.setHours(0, 0, 0, 0);
+
+  const diffTime = checkOut.getTime() - checkIn.getTime();
+  const diffDays = diffTime / (1000 * 60 * 60 * 24);
+
+  // Return at least 0 (avoid negatives)
+  return diffDays > 0 ? diffDays : 0;
+};
+
+  const { user } = useUser();
+  const userId = user?.id;
+
   const bookingDetails = {
-    checkIn: new Date('2024-12-15'),
-    checkOut: new Date('2024-12-18'),
-    guests: 2,
-    rooms: 1,
-    nights: 3
+    checkIn: checkInDate,
+    checkOut: checkOutDate,
+    rooms: rooms,
+    guests: noOfGuests,
+    nights: calculateNights(checkInDate, checkOutDate),
+  };
+
+  const handleBook = async () => {
+    try {
+      await createBooking({
+        userId: userId,
+        hotelId: hotel._id,
+        checkIn: new Date(bookingDetails.checkIn).toDateString(),
+        checkOut: new Date(bookingDetails.checkOut).toDateString(),
+        noOfRooms: parseInt(rooms),
+        noOfGuests: parseInt(noOfGuests),
+      }).unwrap();
+    } catch (error) {}
   };
 
   const selectedRoom = hotel.roomTypes.find((room:any) => room.id === roomType);
@@ -104,11 +150,11 @@ export function BookingContent() {
               </div>
               <div className="flex justify-between">
                 <span>Check-in:</span>
-                <span>{bookingDetails.checkIn.toDateString()}</span>
+                <span>{new Date(bookingDetails.checkIn).toDateString()}</span>
               </div>
               <div className="flex justify-between">
                 <span>Check-out:</span>
-                <span>{bookingDetails.checkOut.toDateString()}</span>
+                <span>{new Date(bookingDetails.checkOut).toDateString()}</span>
               </div>
             </div>
             <div className="space-y-2">
@@ -287,7 +333,11 @@ export function BookingContent() {
                     </RadioGroup>
                     <Button 
                       className="w-full mt-6 luxury-gradient border-0"
-                      onClick={() => setStep(2)}
+                      onClick={
+                        () => {
+                          setStep(2);
+                          handleBook();
+                        }}
                     >
                       Continue to Guest Details
                     </Button>
@@ -475,14 +525,14 @@ export function BookingContent() {
                       <Calendar className="w-4 h-4 mr-2" />
                       Check-in
                     </span>
-                    <span className="text-sm">{bookingDetails.checkIn.toDateString()}</span>
+                    <span className="text-sm">{new Date(bookingDetails.checkIn).toDateString()}</span>
                   </div>
                   <div className="flex items-center justify-between">
                     <span className="flex items-center text-sm">
                       <Calendar className="w-4 h-4 mr-2" />
                       Check-out
                     </span>
-                    <span className="text-sm">{bookingDetails.checkOut.toDateString()}</span>
+                    <span className="text-sm">{new Date(bookingDetails.checkOut).toDateString()}</span>
                   </div>
                   <div className="flex items-center justify-between">
                     <span className="flex items-center text-sm">

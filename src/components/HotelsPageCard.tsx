@@ -127,11 +127,8 @@ export default function HotelsPageCard(props: any) {
           </div>
 
           <div className="flex gap-2">
-            <Button asChild variant="outline" className="flex-1">
-              <Link to={`/hotels/${hotel._id}`}>View Details</Link>
-            </Button>
-            <Button asChild className="flex-1 luxury-gradient border-0">
-              <Link to={`/hotels/${hotel._id}/book`}>Book Now</Link>
+            <Button asChild className="flex-1">
+              <Link to={`/hotels/${hotel._id}`}>Book Now</Link>
             </Button>
           </div>
         </CardContent>

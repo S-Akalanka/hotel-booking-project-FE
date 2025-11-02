@@ -36,7 +36,28 @@ export const api = createApi({
         getAllLocations: build.query({
             query: ()=> 'locations'
         }),
+        createOrFetchUser: build.mutation({
+          query: (user)=>({
+            url: 'users',
+            method: 'POST',
+            body: user
+          })
+        }),
+        createBooking: build.mutation({
+          query: (booking) => ({
+            url: "booking",
+          method: "POST",
+          body: booking,
+          }),
+        }),
     })
 })
 
-export const { useGetAllHotelsQuery, useGetHotelByIdQuery, useAddHotelMutation, useGetAllLocationsQuery } = api;
+export const { 
+  useGetAllHotelsQuery, 
+  useGetHotelByIdQuery, 
+  useAddHotelMutation, 
+  useGetAllLocationsQuery, 
+  useCreateOrFetchUserMutation, 
+  useCreateBookingMutation
+} = api;
