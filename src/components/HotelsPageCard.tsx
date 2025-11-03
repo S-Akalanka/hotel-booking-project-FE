@@ -2,7 +2,7 @@ import { motion } from "motion/react";
 import { Card, CardContent } from "./ui/card";
 import { ImageWithFallback } from "./ImageWithFallback";
 import { Badge } from "./ui/badge";
-import { Car, Coffee, Dumbbell, Heart, MapPin, Star, Users, Utensils, Waves, Wifi } from "lucide-react";
+import { Car, Coffee, Dumbbell, MapPin, Star, Users, Utensils, Waves, Wifi } from "lucide-react";
 import { Button } from "./ui/button";
 import { Link } from "react-router";
 
@@ -40,13 +40,6 @@ export default function HotelsPageCard(props: any) {
             alt={hotel.name}
             className="object-cover group-hover:scale-105 transition-transform duration-300 w-full h-full"
           />
-          <Button
-            variant="ghost"
-            size="sm"
-            className="absolute top-4 right-4 bg-white/80 hover:bg-white"
-          >
-            <Heart className="h-4 w-4" />
-          </Button>
           <div className="absolute bottom-4 left-4">
             <Badge className="bg-black/70 text-white border-0">
               <Star className="w-3 h-3 mr-1 fill-yellow-400 text-yellow-400" />

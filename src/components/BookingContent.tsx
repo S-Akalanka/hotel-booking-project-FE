@@ -1,30 +1,40 @@
-import { useState } from 'react';
-import { Button } from '../components/ui/button';
-import { Input } from '../components/ui/input';
-import { Card, CardContent, CardHeader, CardTitle } from '../components/ui/card';
-import { Badge } from '../components/ui/badge';
-import { Separator } from '../components/ui/separator';
-import { Dialog, DialogContent, DialogHeader, DialogTitle } from '../components/ui/dialog';
-import { Label } from '../components/ui/label';
-import { RadioGroup, RadioGroupItem } from '../components/ui/radio-group';
-import { Checkbox } from '../components/ui/checkbox';
-import { ImageWithFallback } from '../components/ImageWithFallback';
-import { 
-  ChevronLeft, 
-  Shield, 
-  CreditCard, 
-  Lock, 
-  Check, 
-  MapPin, 
+import { useEffect, useState } from "react";
+import { Button } from "../components/ui/button";
+import { Input } from "../components/ui/input";
+import {
+  Card,
+  CardContent,
+  CardHeader,
+  CardTitle,
+} from "../components/ui/card";
+import { Badge } from "../components/ui/badge";
+import { Separator } from "../components/ui/separator";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+} from "../components/ui/dialog";
+import { Label } from "../components/ui/label";
+import { RadioGroup, RadioGroupItem } from "../components/ui/radio-group";
+import { Checkbox } from "../components/ui/checkbox";
+import { ImageWithFallback } from "../components/ImageWithFallback";
+import {
+  ChevronLeft,
+  Shield,
+  CreditCard,
+  Lock,
+  Check,
+  MapPin,
   Calendar,
   Users,
   Star,
-} from 'lucide-react';
-import { motion } from 'motion/react';
-import { useParams } from 'react-router';
-import { useCreateBookingMutation, useGetHotelByIdQuery } from '@/lib/api';
-import { useSelector } from 'react-redux';
-import { useUser } from '@clerk/clerk-react';
+} from "lucide-react";
+import { motion } from "motion/react";
+import { useNavigate, useParams } from "react-router";
+import { useCreateBookingMutation, useGetHotelByIdQuery } from "@/lib/api";
+import { useSelector } from "react-redux";
+import { useUser } from "@clerk/clerk-react";
 
 // interface BookingPageProps {
 //   onPageChange: (page: string) => void;
@@ -32,59 +42,63 @@ import { useUser } from '@clerk/clerk-react';
 
 // export function BookingPage({ onPageChange }: BookingPageProps) {
 export function BookingContent() {
+  const { _id } = useParams();
+
+  const { data: hotel, isLoading, isError, error } = useGetHotelByIdQuery(_id);
+
   const [step, setStep] = useState(1);
   const [showStripeModal, setShowStripeModal] = useState(false);
-  const [roomType, setRoomType] = useState('deluxe');
+  const [roomType, setRoomType] = useState("deluxe");
   const [guestInfo, setGuestInfo] = useState({
-    firstName: '',
-    lastName: '',
-    email: '',
-    phone: '',
-    specialRequests: ''
+    firstName: "",
+    lastName: "",
+    email: "",
+    phone: "",
+    specialRequests: "",
   });
-  const [paymentMethod, setPaymentMethod] = useState('card');
+  const [paymentMethod, setPaymentMethod] = useState("card");
   const [isProcessing, setIsProcessing] = useState(false);
   const [bookingComplete, setBookingComplete] = useState(false);
 
-  const { _id } = useParams();
+  const navigate = useNavigate();
 
-  const { 
-    data: hotel, 
-    isLoading, 
-    isError, 
-    error 
-  } = useGetHotelByIdQuery(_id);
+  const [createBooking, { isLoading: isCreateBookingLoading }] =
+    useCreateBookingMutation();
 
-  const [createBooking, { isLoading: isCreateBookingLoading }] = useCreateBookingMutation();
+  const { checkInDate, checkOutDate, rooms, noOfGuests } = useSelector(
+    (state: any) => state.booking
+  );
+
+
+  useEffect(() => {
+    if (!checkInDate || !checkOutDate) {
+      navigate(`/hotels/${_id}`);
+    }
+  }, [checkInDate, checkOutDate, navigate, _id]);
+
 
   if (isLoading) return <div>Loading hotel...</div>;
   if (isError || !hotel) return <div>Error loading hotel</div>;
 
+  const calculateNights = (
+    checkInDate: Date | string | null,
+    checkOutDate: Date | string | null
+  ): number => {
+    if (!checkInDate || !checkOutDate) return 0;
 
-  const { checkInDate, checkOutDate, rooms, noOfGuests } = useSelector(
-    (state:any) => state.booking
-  );
+    const checkIn = new Date(checkInDate);
+    const checkOut = new Date(checkOutDate);
 
-  if (!checkInDate || !checkOutDate) {
-    return <p>No booking data found. Please go back to booking page.</p>;
-  }
+    // Normalize both dates to midnight to ignore hours/minutes/seconds
+    checkIn.setHours(0, 0, 0, 0);
+    checkOut.setHours(0, 0, 0, 0);
 
-  const calculateNights = (checkInDate: Date | string | null, checkOutDate: Date | string | null): number => {
-  if (!checkInDate || !checkOutDate) return 0;
+    const diffTime = checkOut.getTime() - checkIn.getTime();
+    const diffDays = diffTime / (1000 * 60 * 60 * 24);
 
-  const checkIn = new Date(checkInDate);
-  const checkOut = new Date(checkOutDate);
-
-  // Normalize both dates to midnight to ignore hours/minutes/seconds
-  checkIn.setHours(0, 0, 0, 0);
-  checkOut.setHours(0, 0, 0, 0);
-
-  const diffTime = checkOut.getTime() - checkIn.getTime();
-  const diffDays = diffTime / (1000 * 60 * 60 * 24);
-
-  // Return at least 0 (avoid negatives)
-  return diffDays > 0 ? diffDays : 0;
-};
+    // Return at least 0 (avoid negatives)
+    return diffDays > 0 ? diffDays : 0;
+  };
 
   const { user } = useUser();
   const userId = user?.id;
@@ -105,13 +119,18 @@ export function BookingContent() {
         checkIn: new Date(bookingDetails.checkIn).toDateString(),
         checkOut: new Date(bookingDetails.checkOut).toDateString(),
         noOfRooms: parseInt(rooms),
+        roomType: roomType,
         noOfGuests: parseInt(noOfGuests),
       }).unwrap();
     } catch (error) {}
   };
 
-  const selectedRoom = hotel.roomTypes.find((room:any) => room.id === roomType);
-  const subtotal = selectedRoom ? selectedRoom.price * bookingDetails.nights * bookingDetails.rooms : 0;
+  const selectedRoom = hotel.roomTypes.find(
+    (room: any) => room.id === roomType
+  );
+  const subtotal = selectedRoom
+    ? selectedRoom.price * bookingDetails.nights * bookingDetails.rooms
+    : 0;
   const taxes = Math.round(subtotal * 0.12);
   const total = subtotal + taxes;
 
@@ -140,8 +159,8 @@ export function BookingContent() {
             </div>
             <h1 className="font-playfair text-2xl mb-4">Booking Confirmed!</h1>
             <p className="text-muted-foreground mb-6">
-              Your reservation at {hotel.name} has been confirmed. 
-              You'll receive a confirmation email shortly.
+              Your reservation at {hotel.name} has been confirmed. You'll
+              receive a confirmation email shortly.
             </p>
             <div className="space-y-3 mb-6 text-sm">
               <div className="flex justify-between">
@@ -158,14 +177,14 @@ export function BookingContent() {
               </div>
             </div>
             <div className="space-y-2">
-              <Button 
+              <Button
                 className="w-full luxury-gradient border-0"
                 // onClick={() => onPageChange('account')}
               >
                 View My Bookings
               </Button>
-              <Button 
-                variant="outline" 
+              <Button
+                variant="outline"
                 className="w-full"
                 // onClick={() => onPageChange('home')}
               >
@@ -193,7 +212,9 @@ export function BookingContent() {
             <h3 className="font-semibold mb-3">Order Summary</h3>
             <div className="space-y-2 text-sm">
               <div className="flex justify-between">
-                <span>{selectedRoom?.name} × {bookingDetails.nights} nights</span>
+                <span>
+                  {selectedRoom?.name} × {bookingDetails.nights} nights
+                </span>
                 <span>${subtotal}</span>
               </div>
               <div className="flex justify-between">
@@ -238,12 +259,12 @@ export function BookingContent() {
             <span>Your payment information is secure and encrypted</span>
           </div>
 
-          <Button 
+          <Button
             className="w-full luxury-gradient border-0"
             onClick={handleStripePayment}
             disabled={isProcessing}
           >
-            {isProcessing ? 'Processing...' : `Pay $${total}`}
+            {isProcessing ? "Processing..." : `Pay $${total}`}
           </Button>
         </div>
       </DialogContent>
@@ -255,31 +276,41 @@ export function BookingContent() {
       {/* Header */}
       <div className="border-b pt-25 bg-gray-400">
         <div className="max-w-6xl mx-auto px-4 py-4">
-          <Button 
-            variant="ghost" 
+          <Button
+            variant="ghost"
             // onClick={() => onPageChange('hotel-detail')}
             className="mb-4"
           >
             <ChevronLeft className="h-4 w-4 mr-2" />
             Back to Hotel
           </Button>
-          
+
           <div className="flex items-center justify-between">
-            <h1 className="font-playfair text-2xl md:text-3xl">Complete Your Booking</h1>
-            
+            <h1 className="font-playfair text-2xl md:text-3xl">
+              Complete Your Booking
+            </h1>
+
             {/* Progress Steps */}
             <div className="hidden md:flex items-center space-x-4">
               {[1, 2, 3].map((stepNumber) => (
                 <div key={stepNumber} className="flex items-center">
-                  <div className={`w-8 h-8 rounded-full flex items-center justify-center text-sm font-semibold ${
-                    stepNumber <= step ? 'bg-[var(--luxury-gold)] text-white' : 'bg-gray-200 text-gray-600'
-                  }`}>
+                  <div
+                    className={`w-8 h-8 rounded-full flex items-center justify-center text-sm font-semibold ${
+                      stepNumber <= step
+                        ? "bg-[var(--luxury-gold)] text-white"
+                        : "bg-gray-200 text-gray-600"
+                    }`}
+                  >
                     {stepNumber}
                   </div>
                   {stepNumber < 3 && (
-                    <div className={`w-12 h-0.5 ml-2 ${
-                      stepNumber < step ? 'bg-[var(--luxury-gold)]' : 'bg-gray-200'
-                    }`} />
+                    <div
+                      className={`w-12 h-0.5 ml-2 ${
+                        stepNumber < step
+                          ? "bg-[var(--luxury-gold)]"
+                          : "bg-gray-200"
+                      }`}
+                    />
                   )}
                 </div>
               ))}
@@ -303,25 +334,46 @@ export function BookingContent() {
                     <CardTitle>Select Room Type</CardTitle>
                   </CardHeader>
                   <CardContent>
-                    <RadioGroup value={roomType} onValueChange={setRoomType} className="space-y-4">
-                      {hotel.roomTypes.map((room:any) => (
-                        <div key={room.id} className="flex items-start space-x-3 p-4 border rounded-lg cursor-pointer hover:bg-secondary">
-                          <RadioGroupItem value={room.id} id={room.id} className="mt-1" />
+                    <RadioGroup
+                      value={roomType}
+                      onValueChange={setRoomType}
+                      className="space-y-4"
+                    >
+                      {hotel.roomTypes.map((type: any) => (
+                        <div
+                          key={type.id}
+                          className="flex items-start space-x-3 p-4 border rounded-lg cursor-pointer hover:bg-secondary"
+                        >
+                          <RadioGroupItem
+                            value={type.id}
+                            id={type.id}
+                            className="mt-1"
+                          />
                           <div className="flex-1">
-                            <label htmlFor={room.id} className="cursor-pointer">
+                            <label htmlFor={type.id} className="cursor-pointer">
                               <div className="flex justify-between items-start mb-2">
                                 <div>
-                                  <h3 className="font-semibold">{room.name}</h3>
-                                  <p className="text-sm text-muted-foreground">{room.description}</p>
+                                  <h3 className="font-semibold">{type.name}</h3>
+                                  <p className="text-sm text-muted-foreground">
+                                    {type.description}
+                                  </p>
                                 </div>
                                 <div className="text-right">
-                                  <div className="text-xl font-semibold">${room.price}</div>
-                                  <div className="text-sm text-muted-foreground">per night</div>
+                                  <div className="text-xl font-semibold">
+                                    ${type.price}
+                                  </div>
+                                  <div className="text-sm text-muted-foreground">
+                                    per night
+                                  </div>
                                 </div>
                               </div>
                               <div className="flex flex-wrap gap-2">
-                                {room.features.map((feature:string) => (
-                                  <Badge key={feature} variant="secondary" className="text-xs">
+                                {type.features.map((feature: string) => (
+                                  <Badge
+                                    key={feature}
+                                    variant="secondary"
+                                    className="text-xs"
+                                  >
                                     {feature}
                                   </Badge>
                                 ))}
@@ -331,13 +383,12 @@ export function BookingContent() {
                         </div>
                       ))}
                     </RadioGroup>
-                    <Button 
+                    <Button
                       className="w-full mt-6 luxury-gradient border-0"
-                      onClick={
-                        () => {
-                          setStep(2);
-                          handleBook();
-                        }}
+                      onClick={() => {
+                        setStep(2);
+                        handleBook();
+                      }}
                     >
                       Continue to Guest Details
                     </Button>
@@ -346,7 +397,7 @@ export function BookingContent() {
               </motion.div>
             )}
 
-            {step === 2 && (
+            {/* {step === 2 && (
               <motion.div
                 initial={{ opacity: 0, x: -30 }}
                 animate={{ opacity: 1, x: 0 }}
@@ -426,9 +477,9 @@ export function BookingContent() {
                   </CardContent>
                 </Card>
               </motion.div>
-            )}
+            )} */}
 
-            {step === 3 && (
+            {step === 2 && (
               <motion.div
                 initial={{ opacity: 0, x: -30 }}
                 animate={{ opacity: 1, x: 0 }}
@@ -439,7 +490,10 @@ export function BookingContent() {
                     <CardTitle>Payment Method</CardTitle>
                   </CardHeader>
                   <CardContent className="space-y-6">
-                    <RadioGroup value={paymentMethod} onValueChange={setPaymentMethod}>
+                    <RadioGroup
+                      value={paymentMethod}
+                      onValueChange={setPaymentMethod}
+                    >
                       <div className="flex items-center space-x-3 p-4 border rounded-lg">
                         <RadioGroupItem value="card" id="card" />
                         <CreditCard className="w-5 h-5" />
@@ -447,8 +501,12 @@ export function BookingContent() {
                           Credit or Debit Card
                         </label>
                         <div className="flex space-x-2">
-                          <div className="w-8 h-5 bg-blue-600 rounded text-white text-xs flex items-center justify-center">VISA</div>
-                          <div className="w-8 h-5 bg-red-600 rounded text-white text-xs flex items-center justify-center">MC</div>
+                          <div className="w-8 h-5 bg-blue-600 rounded text-white text-xs flex items-center justify-center">
+                            VISA
+                          </div>
+                          <div className="w-8 h-5 bg-red-600 rounded text-white text-xs flex items-center justify-center">
+                            MC
+                          </div>
                         </div>
                       </div>
                     </RadioGroup>
@@ -464,14 +522,14 @@ export function BookingContent() {
                     </div>
 
                     <div className="flex space-x-3">
-                      <Button 
-                        variant="outline" 
-                        onClick={() => setStep(2)}
+                      <Button
+                        variant="outline"
+                        onClick={() => setStep(1)}
                         className="flex-1"
                       >
                         Back
                       </Button>
-                      <Button 
+                      <Button
                         className="flex-1 luxury-gradient border-0"
                         onClick={() => setShowStripeModal(true)}
                       >
@@ -525,21 +583,28 @@ export function BookingContent() {
                       <Calendar className="w-4 h-4 mr-2" />
                       Check-in
                     </span>
-                    <span className="text-sm">{new Date(bookingDetails.checkIn).toDateString()}</span>
+                    <span className="text-sm">
+                      {new Date(bookingDetails.checkIn).toDateString()}
+                    </span>
                   </div>
                   <div className="flex items-center justify-between">
                     <span className="flex items-center text-sm">
                       <Calendar className="w-4 h-4 mr-2" />
                       Check-out
                     </span>
-                    <span className="text-sm">{new Date(bookingDetails.checkOut).toDateString()}</span>
+                    <span className="text-sm">
+                      {new Date(bookingDetails.checkOut).toDateString()}
+                    </span>
                   </div>
                   <div className="flex items-center justify-between">
                     <span className="flex items-center text-sm">
                       <Users className="w-4 h-4 mr-2" />
                       Guests
                     </span>
-                    <span className="text-sm">{bookingDetails.guests} guests, {bookingDetails.rooms} room</span>
+                    <span className="text-sm">
+                      {bookingDetails.guests} guests, {bookingDetails.rooms}{" "}
+                      room
+                    </span>
                   </div>
                 </div>
 
@@ -553,9 +618,13 @@ export function BookingContent() {
                       <div className="flex justify-between items-start">
                         <div>
                           <h5 className="font-medium">{selectedRoom.name}</h5>
-                          <p className="text-sm text-muted-foreground">{selectedRoom.description}</p>
+                          <p className="text-sm text-muted-foreground">
+                            {selectedRoom.description}
+                          </p>
                         </div>
-                        <span className="font-semibold">${selectedRoom.price}/night</span>
+                        <span className="font-semibold">
+                          ${selectedRoom.price}/night
+                        </span>
                       </div>
                     </div>
                   </div>
@@ -568,7 +637,9 @@ export function BookingContent() {
                   <h4 className="font-semibold">Price Breakdown</h4>
                   <div className="space-y-2 text-sm">
                     <div className="flex justify-between">
-                      <span>${selectedRoom?.price} × {bookingDetails.nights} nights</span>
+                      <span>
+                        ${selectedRoom?.price} × {bookingDetails.nights} nights
+                      </span>
                       <span>${subtotal}</span>
                     </div>
                     <div className="flex justify-between">
@@ -587,8 +658,12 @@ export function BookingContent() {
                 <div>
                   <h4 className="font-semibold mb-2">Included Amenities</h4>
                   <div className="flex flex-wrap gap-2">
-                    {hotel.amenities.map((amenity:any) => (
-                      <Badge key={amenity.name} variant="secondary" className="text-xs">
+                    {hotel.amenities.map((amenity: any) => (
+                      <Badge
+                        key={amenity.name}
+                        variant="secondary"
+                        className="text-xs"
+                      >
                         {amenity.name}
                       </Badge>
                     ))}
