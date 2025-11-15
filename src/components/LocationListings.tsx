@@ -7,7 +7,7 @@ export default function LocationListings(){
     data: locations = [],
     isLoading: isLocationsLoading,
     isError: isLocationsError,
-    error: locationsError,
+    // error: locationsError,
   } = useGetAllLocationsQuery(undefined);
 
   if (isLocationsLoading) 
@@ -29,7 +29,7 @@ export default function LocationListings(){
           </div>
 
           <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
-            {locations.map((location: any, index: number) => (
+            {locations.slice(0,4).map((location: any, index: number) => (
               <motion.div
                 key={location.name}
                 initial={{ opacity: 0, y: 30 }}

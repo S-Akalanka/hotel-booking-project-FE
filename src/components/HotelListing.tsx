@@ -2,13 +2,14 @@ import { Button } from "./ui/button";
 import { useGetAllHotelsQuery } from "@/lib/api";
 import { Link } from "react-router";
 import HomeHotelCard from "./HomeHotelCard";
+import LocationListings from "./LocationListings";
 
-export default function HotelListings() {
+export default function HotelListing() {
   const {
     data: hotels = [],
     isLoading: isHotelsLoading,
     isError: isHotelsError,
-    error: hotelsError,
+    // error: hotelsError,
   } = useGetAllHotelsQuery(undefined);
 
   if (isHotelsLoading) 
@@ -32,7 +33,7 @@ export default function HotelListings() {
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-          {hotels.map((hotel: any, index: number) => (
+          {hotels.slice(0,6).map((hotel: any, index: number) => (
             <HomeHotelCard
             key={index}
             hotel = {hotel}
@@ -47,6 +48,8 @@ export default function HotelListings() {
           <Button>View All</Button>
         </Link>
       </section>
+
+      <LocationListings/>
 
     </>
   );

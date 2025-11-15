@@ -2,9 +2,11 @@ import { configureStore } from "@reduxjs/toolkit";
 import { api } from "./api";
 import { setupListeners } from "@reduxjs/toolkit/query";
 import bookingReducer from "./features/bookingSlice";
+import filterReducer from "./features/filterSlice";
 
 export const store = configureStore({
   reducer: {
+    filter: filterReducer,
     booking: bookingReducer,
     [api.reducerPath]: api.reducer,
   },
