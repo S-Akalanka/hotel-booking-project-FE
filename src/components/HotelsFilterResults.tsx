@@ -1,10 +1,10 @@
-import { useSearchHotelsQuery } from "@/lib/api";
+import { useFilterHotelsQuery } from "@/lib/api";
 import HomeHotelCard from "./HomeHotelCard";
 import { useSelector } from "react-redux";
 
 export default function HotelListings() {
   const filter = useSelector((state: any) => state.filter);
-  const filterForm = {
+  const filters = {
     location: filter.location,
     checkIn: filter.checkIn,
     checkOut: filter.checkOut,
@@ -16,7 +16,7 @@ export default function HotelListings() {
     isLoading,
     isError,
     // error,
-  } = useSearchHotelsQuery(filterForm);
+  } = useFilterHotelsQuery(filters);
 
 
   if (isLoading) return <p>Loading...</p>;

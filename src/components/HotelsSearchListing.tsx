@@ -1,24 +1,30 @@
 import { Button } from "./ui/button";
 import { Card } from "./ui/card";
 import { Sheet, SheetContent, SheetTrigger } from "./ui/sheet";
-import { useGetAllHotelsQuery } from "@/lib/api";
+import { useSearchHotelsQuery } from "@/lib/api";
 import HotelsPageCard from "./HotelsPageCard";
 import FilterSidebar from "./FilterSiderbar";
 import { Filter } from "lucide-react";
+import { useSelector } from "react-redux";
 
-// interface HotelsPageProps {
-//   onPageChange: (page: string) => void;
-// }
-
-// export function HotelsPage({ onPageChange }: HotelsPageProps) {
-export function HotelsContent() {
+export function HotelsSearchListing() {
+  const search = useSelector((state: any) => state.search);
+  const filters = {
+    query: search.query,
+    sortBy: search.sortBy,
+    page: search.page,
+    maxPrice: search.maxPrice,
+    minPrice: search.minPrice,
+    rating: search.rating,
+    amenities: search.amenities,
+  };
 
   const {
     data: hotels = [],
     isLoading: isHotelsLoading,
     isError: isHotelsError,
     error: hotelsError,
-  } = useGetAllHotelsQuery(undefined);
+  } = useSearchHotelsQuery(filters);
 
   return (
     <div className="min-h-screen bg-background">
@@ -26,15 +32,7 @@ export function HotelsContent() {
         <div className="flex gap-8">
           {/* Desktop Filters */}
           <div className="hidden lg:block w-80 flex-shrink-0">
-            <Card className="p-6 sticky top-24">
-              <div className="flex items-center justify-between mb-6">
-                <h2 className="font-semibold text-lg">Filters</h2>
-                <Button variant="ghost" size="sm">
-                  Clear All
-                </Button>
-              </div>
-              <FilterSidebar />
-            </Card>
+            <FilterSidebar />
           </div>
 
           {/* Mobile Filter Sheet */}
@@ -49,25 +47,16 @@ export function HotelsContent() {
             </SheetTrigger>
             <SheetContent side="left" className="w-80">
               <div className="mt-6">
-                <h2 className="font-semibold text-lg mb-6">Filters</h2>
                 <FilterSidebar />
               </div>
             </SheetContent>
           </Sheet>
 
           {/* Hotels List */}
-          <div className="flex-1">
-            <div className="mb-6">
-              <p className="text-muted-foreground">
-                {hotels.length} hotels found
-              </p>
-            </div>
-
-            <div className="space-y-6">
-              {hotels.map((hotel: any, index: number) => (
-                <HotelsPageCard key={hotel._id} hotel={hotel} index={index} />
-              ))}
-            </div>
+          <div className="space-y-6">
+            {hotels.map((hotel: any, index: number) => (
+              <HotelsPageCard key={hotel._id} hotel={hotel} index={index} />
+            ))}
           </div>
         </div>
       </div>

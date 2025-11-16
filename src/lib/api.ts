@@ -50,13 +50,31 @@ export const api = createApi({
         body: booking,
       }),
     }),
-    searchHotels: build.query({
-      query: (filterForm) => {
+    filterHotels: build.query({
+      query: (filters) => {
         const params = new URLSearchParams({
-          location: filterForm.location || "",
-          checkIn: filterForm.checkIn || "",
-          checkOut: filterForm.checkOut || "",
-          guest: String(filterForm.guest || 0),
+          location: filters.location || "",
+          checkIn: filters.checkIn || "",
+          checkOut: filters.checkOut || "",
+          guest: String(filters.guest || 0),
+        });
+
+        return {
+          url: `/hotels/filter?${params.toString()}`,
+          method: "GET",
+        };
+      },
+    }),
+    searchHotels: build.query({
+      query: (filters) => {
+        const params = new URLSearchParams({
+          query: filters.query || "",
+          sortBy: filters.sortBy || "",
+          page: filters.page || 1,
+          maxPrice: filters.maxPrice || 0,
+          minPrice: filters.minPrice || 0,
+          rating: filters.rating || "",
+          amenities: filters.amenities || [],
         });
 
         return {
@@ -65,20 +83,6 @@ export const api = createApi({
         };
       },
     }),
-
-    // advanceSearchHotels: build.query({
-    //   query: (advanceSearchParams:{
-    //     location?: string;
-    //     minPrice?: number;
-    //     maxPrice?: number;
-    //     sortBy?: string;
-    //     page?: number;
-    //   }) => ({
-    //     url: 'hotels',
-    //     method: 'GET',
-    //     params: advanceSearchParams,
-    //   })
-    // })
   }),
 });
 
@@ -89,6 +93,6 @@ export const {
   useGetAllLocationsQuery,
   useCreateOrFetchUserMutation,
   useCreateBookingMutation,
+  useFilterHotelsQuery,
   useSearchHotelsQuery,
-  // useAdvanceSearchHotelsQuery
 } = api;
