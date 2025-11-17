@@ -1,4 +1,4 @@
-import { AccountContent } from "@/components/AcountContent";
+import { AccountContent } from "@/components/AccountContent";
 
 export default function AccountPage(){
     return(

@@ -21,7 +21,7 @@ import { useDispatch } from "react-redux";
 import { setPage, setQuery, setSortBy } from "@/lib/features/searchSlice";
 import { Button } from "@/components/ui/button";
 
-export default function HotelsToolBar() {
+export default function HotelsPageContent() {
   const [searchText, setSearchText] = useState("");
   const [sort, setsort] = useState("recommended");
   const [currentPage, setCurrentPage] = useState(1);

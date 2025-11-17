@@ -32,7 +32,7 @@ createRoot(document.getElementById("root")!).render(
               <Route index element={<HomePage />} />
               <Route path="/sign-in" element={<SignInPage />} />
               <Route path="/sign-up" element={<SignUpPage />} />
-              <Route path="/account" element={<AccountPage />} />
+              <Route path="/users" element={<AccountPage />} />
               <Route path="/hotels" element={<HotelsPage />} />
               <Route element={<ProtectLayout />}>
                 <Route path="/hotels/:_id" element={<HotelDetailsPage />} />

@@ -1,10 +1,10 @@
-import HotelsToolBar from "@/components/HotelsToolBar";
+import HotelsPageContent from "@/components/HotelsPageContent";
 
 export default function HotelsPage() {
 
   return (
     <div>
-      <HotelsToolBar />
+      <HotelsPageContent />
     </div>
   );
 }

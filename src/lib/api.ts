@@ -5,7 +5,6 @@ export const api = createApi({
   baseQuery: fetchBaseQuery({
     baseUrl: "http://localhost:8000/api/",
     prepareHeaders: async (headers) => {
-      // Wait until Clerk is loaded
       if (window.Clerk && window.Clerk.session) {
         try {
           const token = await window.Clerk.session.getToken();
@@ -19,6 +18,7 @@ export const api = createApi({
       return headers;
     },
   }),
+  tagTypes: ["Bookings", "Users"],
   endpoints: (build) => ({
     getAllHotels: build.query({
       query: () => "hotels",
@@ -31,23 +31,6 @@ export const api = createApi({
         url: "hotels",
         method: "POST",
         body: hotel,
-      }),
-    }),
-    getAllLocations: build.query({
-      query: () => "locations",
-    }),
-    createOrFetchUser: build.mutation({
-      query: (user) => ({
-        url: "users",
-        method: "POST",
-        body: user,
-      }),
-    }),
-    createBooking: build.mutation({
-      query: (booking) => ({
-        url: "booking",
-        method: "POST",
-        body: booking,
       }),
     }),
     filterHotels: build.query({
@@ -83,6 +66,43 @@ export const api = createApi({
         };
       },
     }),
+
+    getAllLocations: build.query({
+      query: () => "locations",
+    }),
+
+    getUser: build.query({
+      query: () => "users",
+      providesTags: [{ type: "Users", id: "LIST" }],
+    }),
+    updateUser: build.mutation({
+      query: (user) => ({
+        url: "users",
+        method: "PUT",
+        body: user,
+      }),
+      invalidatesTags: [{ type: "Users", id: "LIST" }],
+    }),
+    createOrFetchUser: build.mutation({
+      query: (user) => ({
+        url: "users",
+        method: "POST",
+        body: user,
+      }),
+    }),
+    getuserPastBookings: build.query({
+      query: () => "users/bookings",
+      providesTags: [{ type: "Bookings", id: "LIST" }],
+    }),
+
+    createBooking: build.mutation({
+      query: (booking) => ({
+        url: "booking",
+        method: "POST",
+        body: booking,
+      }),
+      invalidatesTags: [{ type: "Bookings", id: "LIST" }],
+    }),
   }),
 });
 
@@ -90,9 +110,12 @@ export const {
   useGetAllHotelsQuery,
   useGetHotelByIdQuery,
   useAddHotelMutation,
-  useGetAllLocationsQuery,
-  useCreateOrFetchUserMutation,
-  useCreateBookingMutation,
   useFilterHotelsQuery,
   useSearchHotelsQuery,
+  useGetAllLocationsQuery,
+  useGetUserQuery,
+  useUpdateUserMutation,
+  useCreateOrFetchUserMutation,
+  useGetuserPastBookingsQuery,
+  useCreateBookingMutation,
 } = api;
