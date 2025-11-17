@@ -23,6 +23,21 @@ import {
 import { Calendar } from "./ui/calendar";
 import { Popover } from "./ui/popover";
 import { PopoverContent, PopoverTrigger } from "@radix-ui/react-popover";
+import { useGetAllLocationsQuery } from "@/lib/api";
+import {
+  Command,
+  CommandGroup,
+  CommandInput,
+  CommandItem,
+} from "@/components/ui/command";
+import { DevTool } from "@hookform/devtools";
+import { useDispatch } from "react-redux";
+import {
+  setCheckIn,
+  setCheckOut,
+  setGuest,
+  setLocation,
+} from "@/lib/features/filterSlice";
 
 const promptFormSchema = z.object({
   prompt: z.string().min(1, {
@@ -30,23 +45,39 @@ const promptFormSchema = z.object({
   }),
 });
 
-const filterFormSchema = z.object({
-  location: z.string().min(1, {
-    message: "Location is required",
-  }),
-  checkIn: z.date().min(1, {
-    message: "Check in date is required",
-  }),
-  checkOut: z.date().min(1, {
-    message: "Check out date is required",
-  }),
-  guest: z.number().min(1, {
-    message: "No. guest is required",
-  }),
-});
+const filterFormSchema = z
+  .object({
+    location: z.string().optional(),
+    checkIn: z.date().optional(),
+    checkOut: z.date().optional(),
+    guest: z.number().optional(),
+  })
+  .refine(
+    (data) => {
+      const onlyLocationFilled =
+        data.location && !data.checkIn && !data.checkOut && !data.guest;
+      const allFilled =
+        data.location && data.checkIn && data.checkOut && data.guest;
+      return onlyLocationFilled || allFilled;
+    },
+    {
+      message: "Either provide just location or fill all fields",
+      path: ["location"],
+    }
+  );
 
 export default function HeroFilters() {
   const [aiInput, setAiInput] = useState(false);
+  const [open, setOpen] = useState(false);
+
+  const dispatch = useDispatch();
+
+  const {
+    data: locations = [],
+    // isLoading: isLocationsLoading,
+    // isError: isLocationsError,
+    // error: locationsError,
+  } = useGetAllLocationsQuery(undefined);
 
   const aiSearchBtnHandler = () => {
     aiInput ? setAiInput(false) : setAiInput(true);
@@ -76,6 +107,22 @@ export default function HeroFilters() {
     } catch (error) {
       console.error(error);
       toast.error("Something wrong");
+    }
+  }
+
+  function filterOnSubmit(values: any) {
+    const toastId = toast.loading("Loading...");
+
+    try {
+      if (values.location) dispatch(setLocation(values.location));
+      if (values.checkIn) dispatch(setCheckIn(values.checkIn.toISOString()));
+      if (values.checkOut) dispatch(setCheckOut(values.checkOut.toISOString()));
+      if (values.guest) dispatch(setGuest(values.guest));
+
+      toast.success("Filters applied", { id: toastId });
+    } catch (error) {
+      console.error(error);
+      toast.error("Something went wrong", { id: toastId });
     }
   }
 
@@ -137,39 +184,59 @@ export default function HeroFilters() {
               <Search />
               Search
             </Button>
+            <DevTool control={aiForm.control} />
           </form>
         </Form>
       ) : (
         <div>
           <Form {...filterForm}>
-            <form className="flex flex-wrap items-center justify-center gap-2.5 mx-8">
+            <form
+              onSubmit={filterForm.handleSubmit(filterOnSubmit, (errors) => {
+                console.log("Validation errors:", errors);
+                if (errors.location) {
+                  toast.error(errors.location.message);
+                }
+              })}
+              className="flex flex-wrap items-center justify-center gap-2.5 mx-8"
+            >
               <FormField
                 control={filterForm.control}
                 name="location"
                 render={({ field }) => (
                   <FormItem className="filters">
-                    <DropdownMenu>
-                      <DropdownMenuTrigger asChild>
+                    <Popover open={open} onOpenChange={setOpen}>
+                      <PopoverTrigger asChild>
                         <Button
                           type="button"
-                          className={`${filter} location-btn bg-amber-200 w-56 max-[748px]:w-36 `}
+                          className={`${filter} location-btn  text-[1rem] max-[748px]:text-[0.7rem] bg-amber-200 w-56 max-[748px]:w-36 `}
                         >
                           <MapPin />
                           {field.value || "Where to ?"}
                         </Button>
-                      </DropdownMenuTrigger>
-                      <DropdownMenuContent className="location-dropdown-content flex flex-col items-center rounded-[0.5rem] w-56 max-[748px]:w-36 py-[0.5rem] max-[748px]:py-[0.16rem] text-[1rem] max-[748px]:text-[0.7rem]">
-                        {["Tokyo", "Osaka", "Nagoya"].map((city) => (
-                          <DropdownMenuItem
-                            key={city}
-                            onClick={() => field.onChange(city)}
-                            className="location-dropdown cursor-pointer py-1 max-[748px]:py-0 w-54 max-[748px]:w-34 px-6 max-[748px]:px-3.5 rounded-[0.75rem]"
-                          >
-                            {city}
-                          </DropdownMenuItem>
-                        ))}
-                      </DropdownMenuContent>
-                    </DropdownMenu>
+                      </PopoverTrigger>
+                      <PopoverContent className="w-56 max-h-72 overflow-auto p-0">
+                        <Command className="location-dropdown-content rounded-[0.5rem] w-full">
+                          <CommandInput
+                            placeholder="Search location..."
+                            className="px-3"
+                          />
+                          <CommandGroup>
+                            {locations?.map((location: any) => (
+                              <CommandItem
+                                key={location.name}
+                                onSelect={() => {
+                                  setOpen(false);
+                                  field.onChange(location.name);
+                                }}
+                                className="location-dropdown text-[1rem] max-[748px]:text-[0.7rem] cursor-pointer py-2 px-3 hover:bg-amber-50 w-full"
+                              >
+                                {location.name}
+                              </CommandItem>
+                            ))}
+                          </CommandGroup>
+                        </Command>
+                      </PopoverContent>
+                    </Popover>
                   </FormItem>
                 )}
               />
@@ -250,7 +317,11 @@ export default function HeroFilters() {
                             onClick={() => field.onChange(i)}
                             className="guest-dropdown cursor-pointer py-1 max-[748px]:py-0 text-center w-46 max-[748px]:w-29 rounded-[0.75rem]"
                           >
-                            { i==1 ? `${i} Guest` : i===5 ? `${i}+ Guests`: `${i} Guests`}
+                            {i == 1
+                              ? `${i} Guest`
+                              : i === 5
+                              ? `${i}+ Guests`
+                              : `${i} Guests`}
                           </DropdownMenuItem>
                         ))}
                       </DropdownMenuContent>
@@ -266,6 +337,7 @@ export default function HeroFilters() {
                 <Search />
                 Search
               </Button>
+              <DevTool control={filterForm.control} />
             </form>
           </Form>
         </div>
