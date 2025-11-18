@@ -104,14 +104,12 @@ export function HotelDetailsContent() {
     <div className="min-h-screen bg-background ">
       {/* Back Button */}
       <div className="max-w-7xl mx-auto px-4 py-25">
-        <Button
-          variant="ghost"
-          //   onClick={() => onPageChange('hotels')}
-          className="mb-4"
-        >
-          <ChevronLeft className="h-4 w-4 mr-2" />
-          Back to Hotels
-        </Button>
+        <Link to={"/"}>
+          <Button variant="ghost" className="mb-4">
+            <ChevronLeft className="h-4 w-4 mr-2" />
+            Back to Hotels
+          </Button>
+        </Link>
       </div>
 
       {/* Image Gallery */}

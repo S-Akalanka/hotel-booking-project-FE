@@ -4,11 +4,13 @@ import { setupListeners } from "@reduxjs/toolkit/query";
 import bookingReducer from "./features/bookingSlice";
 import filterReducer from "./features/filterSlice";
 import searchReducer from "./features/searchSlice";
+import aiSearchReducer from "./features/aiSearchSlice";
 
 export const store = configureStore({
   reducer: {
     filter: filterReducer,
     search: searchReducer,
+    aiSearch: aiSearchReducer,
     booking: bookingReducer,
     [api.reducerPath]: api.reducer,
   },

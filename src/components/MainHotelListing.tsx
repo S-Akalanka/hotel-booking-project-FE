@@ -4,7 +4,7 @@ import { Link } from "react-router";
 import HomeHotelCard from "./HomeHotelCard";
 import LocationListings from "./LocationListings";
 
-export default function HotelListing() {
+export default function MainHotelListing() {
   const {
     data: hotels = [],
     isLoading: isHotelsLoading,

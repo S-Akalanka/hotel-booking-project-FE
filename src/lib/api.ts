@@ -18,7 +18,7 @@ export const api = createApi({
       return headers;
     },
   }),
-  tagTypes: ["Bookings", "Users"],
+  tagTypes: ["Bookings", "Users","Hotels"],
   endpoints: (build) => ({
     getAllHotels: build.query({
       query: () => "hotels",
@@ -66,6 +66,10 @@ export const api = createApi({
         };
       },
     }),
+    getHotelsByAiSearch: build.query({
+      query: (search) => `hotels/ai-search?query=${search}`,
+      providesTags: [{ type: "Hotels", id: "search" }],
+    }),
 
     getAllLocations: build.query({
       query: () => "locations",
@@ -112,6 +116,7 @@ export const {
   useAddHotelMutation,
   useFilterHotelsQuery,
   useSearchHotelsQuery,
+  useGetHotelsByAiSearchQuery,
   useGetAllLocationsQuery,
   useGetUserQuery,
   useUpdateUserMutation,

@@ -32,7 +32,7 @@ export function AccountProfile() {
       lastName: user.lastName || defaultValue,
       dateOfBirth: user.dateOfBirth
         ? new Date(user.dateOfBirth).toISOString().split("T")[0]
-        : defaultValue,
+        : "",
       nIdOrPassPortNum: user.nIdOrPassPortNum || defaultValue,
       email: user.email || defaultValue,
       phone: user.phoneNumbers[0] || defaultValue,

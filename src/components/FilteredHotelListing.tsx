@@ -2,7 +2,7 @@ import { useFilterHotelsQuery } from "@/lib/api";
 import HomeHotelCard from "./HomeHotelCard";
 import { useSelector } from "react-redux";
 
-export default function HotelListings() {
+export default function FilteredHotelListing() {
   const filter = useSelector((state: any) => state.filter);
   const filters = {
     location: filter.location,

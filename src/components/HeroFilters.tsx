@@ -30,7 +30,6 @@ import {
   CommandInput,
   CommandItem,
 } from "@/components/ui/command";
-import { DevTool } from "@hookform/devtools";
 import { useDispatch } from "react-redux";
 import {
   setCheckIn,
@@ -38,6 +37,8 @@ import {
   setGuest,
   setLocation,
 } from "@/lib/features/filterSlice";
+import { setAiQuery } from "@/lib/features/aiSearchSlice";
+import { useUser } from "@clerk/clerk-react";
 
 const promptFormSchema = z.object({
   prompt: z.string().min(1, {
@@ -69,6 +70,7 @@ const filterFormSchema = z
 export default function HeroFilters() {
   const [aiInput, setAiInput] = useState(false);
   const [open, setOpen] = useState(false);
+  const { isSignedIn } = useUser();
 
   const dispatch = useDispatch();
 
@@ -79,7 +81,11 @@ export default function HeroFilters() {
     // error: locationsError,
   } = useGetAllLocationsQuery(undefined);
 
-  const aiSearchBtnHandler = () => {
+  const switchButtonHandler = () => {
+    if (!isSignedIn) {
+      toast.error("Please sign in to access AI search.");
+      return;
+    }
     aiInput ? setAiInput(false) : setAiInput(true);
   };
 
@@ -103,6 +109,7 @@ export default function HeroFilters() {
   function aiOnSubmit(values: any) {
     try {
       console.log(values.prompt);
+      dispatch(setAiQuery(values.prompt));
       toast.success("Loading...");
     } catch (error) {
       console.error(error);
@@ -136,7 +143,7 @@ export default function HeroFilters() {
         <Button
           type="button"
           className="switch-btn bg-white text-[1.1rem] text-black py-6 w-[140px] max-[748px]:w-[95px] max-[748px]:py-4 max-[748px]:text-[11px] rounded-3xl"
-          onClick={aiSearchBtnHandler}
+          onClick={switchButtonHandler}
         >
           {aiInput ? (
             <>
@@ -184,7 +191,6 @@ export default function HeroFilters() {
               <Search />
               Search
             </Button>
-            <DevTool control={aiForm.control} />
           </form>
         </Form>
       ) : (
@@ -337,7 +343,6 @@ export default function HeroFilters() {
                 <Search />
                 Search
               </Button>
-              <DevTool control={filterForm.control} />
             </form>
           </Form>
         </div>
