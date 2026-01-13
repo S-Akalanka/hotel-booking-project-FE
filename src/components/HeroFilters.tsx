@@ -39,6 +39,7 @@ import {
 } from "@/lib/features/filterSlice";
 import { setAiQuery } from "@/lib/features/aiSearchSlice";
 import { useUser } from "@clerk/clerk-react";
+import GradientText from "@/components/ui/GradientText/GradientText";
 
 const promptFormSchema = z.object({
   prompt: z.string().min(1, {
@@ -139,25 +140,33 @@ export default function HeroFilters() {
 
   return (
     <>
-      <div className="text-white">
-        <Button
-          type="button"
-          className="switch-btn bg-white text-[1.1rem] text-black py-6 w-[140px] max-[748px]:w-[95px] max-[748px]:py-4 max-[748px]:text-[11px] rounded-3xl"
-          onClick={switchButtonHandler}
-        >
-          {aiInput ? (
-            <>
-              {" "}
-              <SlidersHorizontal /> Filters{" "}
-            </>
-          ) : (
-            <>
-              {" "}
-              <Sparkles /> AI Search{" "}
-            </>
-          )}
-        </Button>
-      </div>
+      <Button
+        type="button"
+        className="ease-in-out text-black transform transition-transform duration-300 hover:scale-103 bg-gradient-to-br from-purple-300 via-white to-purple-100 text-[1.1rem] py-6 w-[140px] max-[748px]:w-[110px] max-[748px]:py-4 max-[748px]:text-[11px] rounded-3xl"
+        onClick={switchButtonHandler}
+      >
+        {aiInput ? (
+          <>
+            {" "}
+            <SlidersHorizontal/> Filters{" "}
+          </>
+        ) : (
+          <>
+            {" "}
+            <b>
+              <Sparkles />
+            </b>
+            <GradientText
+              colors={["#111827", "#273449", "#3730a3", "#4f46e5", "#7c3aed"]}
+              animationSpeed={3}
+              showBorder={false}
+              className="custom-class bg-clip-text bg-transparent"
+            >
+              <b>AI Search </b>
+            </GradientText>
+          </>
+        )}
+      </Button>
 
       {aiInput ? (
         <Form {...aiForm}>
@@ -177,7 +186,7 @@ export default function HeroFilters() {
                   <FormControl>
                     <Input
                       placeholder="Prompt"
-                      className="w-218 max-[748px]:w-100 max-[748px]:text- py-7 px-8 rounded-4xl border-solid border-[0.2px] border-black text-black bg-white flex"
+                      className="w-218 max-[748px]:w-100 max-[748px]:text- py-7 px-8 rounded-4xl border-solid border-[0.2px] flex border-black bg-white dark:bg-black"
                       {...field}
                     />
                   </FormControl>
@@ -186,10 +195,10 @@ export default function HeroFilters() {
             />
             <Button
               type="submit"
-              className="prompt-search-btn bg-yellow-400 w-28 max-[748px]:w-20 rounded-4xl border-solid border-[0.2px] border-black text-black py-7 text-[1rem]"
+              className="prompt-search-btn transform transition-transform duration-300 hover:scale-103 bg-[var(--search-filter)] hover:bg-[var(--search-filter-hover)] w-28 max-[748px]:w-20 rounded-4xl text-black py-7 text-[1rem]"
             >
               <Search />
-              Search
+              <b>Search</b>
             </Button>
           </form>
         </Form>
@@ -214,7 +223,7 @@ export default function HeroFilters() {
                       <PopoverTrigger asChild>
                         <Button
                           type="button"
-                          className={`${filter} location-btn  text-[1rem] max-[748px]:text-[0.7rem] bg-amber-200 w-56 max-[748px]:w-36 `}
+                          className={`${filter} bg-[var(--location-filter)] hover:bg-[var(--location-filter-hover)] text-[1rem] max-[748px]:text-[0.7rem] w-56 max-[748px]:w-36 `}
                         >
                           <MapPin />
                           {field.value || "Where to ?"}
@@ -254,7 +263,7 @@ export default function HeroFilters() {
                   <FormItem>
                     <Popover>
                       <PopoverTrigger
-                        className={`${filter} checkIn-btn bg-amber-100 w-52  max-[748px]:w-34 h-14 max-[748px]:h-10 flex justify-center items-center`}
+                        className={`${filter} checkIn-btn bg-[var(--checkin-filter)] hover:bg-[var(--checkin-filter-hover)] w-52  max-[748px]:w-34 h-14 max-[748px]:h-10 flex justify-center items-center`}
                       >
                         <CalendarIcon size={15} className="m-2" />
                         {field.value
@@ -281,7 +290,7 @@ export default function HeroFilters() {
                   <FormItem>
                     <Popover>
                       <PopoverTrigger
-                        className={`${filter} checkout-btn bg-amber-100 w-52 max-[748px]:w-34 h-14 max-[748px]:h-10 flex justify-center items-center`}
+                        className={`${filter} checkout-btn bg-[var(--checkout-filter)] hover:bg-[var(--checkout-filter-hover)] w-52 max-[748px]:w-34 h-14 max-[748px]:h-10 flex justify-center items-center`}
                       >
                         <CalendarIcon size={15} className="m-2" />
                         {field.value
@@ -310,18 +319,18 @@ export default function HeroFilters() {
                       <DropdownMenuTrigger asChild>
                         <Button
                           type="button"
-                          className={`${filter} guest-btn bg-amber-50 w-48 max-[748px]:w-32`}
+                          className={`${filter} guest-btn bg-[var(--guest-filter)] hover:bg-[var(--guest-filter-hover)] w-48 max-[748px]:w-32`}
                         >
                           <Users />
                           {field.value || "Select guests"}
                         </Button>
                       </DropdownMenuTrigger>
-                      <DropdownMenuContent className="guest-dropdown-content  flex flex-col items-center rounded-[0.5rem] py-[0.5rem] max-[748px]:py-[0.16rem] w-48 max-[748px]:w-32 text-[1rem] max-[748px]:text-[0.7rem]">
+                      <DropdownMenuContent className=" bg-[var(--guest-dropdown-content)] flex flex-col items-center rounded-[0.5rem] py-[0.5rem] max-[748px]:py-[0.16rem] w-48 max-[748px]:w-32 text-[1rem] max-[748px]:text-[0.7rem]">
                         {[1, 2, 3, 4, 5].map((i) => (
                           <DropdownMenuItem
                             key={i}
                             onClick={() => field.onChange(i)}
-                            className="guest-dropdown cursor-pointer py-1 max-[748px]:py-0 text-center w-46 max-[748px]:w-29 rounded-[0.75rem]"
+                            className="hover:bg-[var(--guest-dropdown-content-hover)] cursor-pointer py-1 max-[748px]:py-0 text-center w-46 max-[748px]:w-29 rounded-[0.75rem]"
                           >
                             {i == 1
                               ? `${i} Guest`
@@ -338,10 +347,10 @@ export default function HeroFilters() {
 
               <Button
                 type="submit"
-                className={`filter-search ${filter} filter-search bg-yellow-400 ml-3 w-28 max-[748px]:w-20 rounded-4xl`}
+                className={`filter-search ${filter} border-none transform transition-transform duration-300 hover:scale-103 filter-search bg-[var(--search-filter)] hover:bg-[var(--search-filter-hover)] ml-3 w-28 max-[748px]:w-20 rounded-4xl`}
               >
                 <Search />
-                Search
+                <b>Search</b>
               </Button>
             </form>
           </Form>

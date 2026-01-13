@@ -24,7 +24,7 @@ function Hero() {
               }`}
               style={{ backgroundImage: `url(${image})` }}
             >
-              <div className="absolute inset-0 bg-black/30"></div>
+              <div className="absolute inset-0 bg-[var(--hero-background)]"></div>
             </div>
           );
         })}

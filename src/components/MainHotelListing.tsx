@@ -3,6 +3,7 @@ import { useGetAllHotelsQuery } from "@/lib/api";
 import { Link } from "react-router";
 import HomeHotelCard from "./HomeHotelCard";
 import LocationListings from "./LocationListings";
+import { ArrowRight } from "lucide-react";
 
 export default function MainHotelListing() {
   const {
@@ -24,10 +25,10 @@ export default function MainHotelListing() {
       {/* Featured Hotels */}
       <section className="py-16 px-4 max-w-7xl mx-auto">
         <div className="text-center mb-12">
-          <h2 className="font-playfair text-3xl md:text-4xl mb-4">
+          <h2 className="text-3xl md:text-4xl mb-4 mt-20">
             Featured Luxury Hotels
           </h2>
-          <p className="text-muted-foreground text-lg">
+          <p className="text-lg">
             Handpicked exceptional properties for your perfect stay
           </p>
         </div>
@@ -45,7 +46,9 @@ export default function MainHotelListing() {
 
       <section className="pb-16 flex justify-center">
         <Link to="/hotels">
-          <Button>View All</Button>
+          <Button className="transform transition-transform duration-300 hover:scale-103 border-solid border-[0.2px] border-black !px-[90px] py-6 rounded-3xl text-[1.25rem]">
+            View All <ArrowRight className="!w-6 !h-6" />
+          </Button>
         </Link>
       </section>
 

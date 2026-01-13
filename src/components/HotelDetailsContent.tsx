@@ -28,11 +28,6 @@ import {
 import { useDispatch } from "react-redux";
 import { setBookingDetails } from "@/lib/features/bookingSlice";
 
-// interface HotelDetailPageProps {
-//   onPageChange: (page: string) => void;
-// }
-
-// export function HotelDetailPage({ onPageChange }: HotelDetailPageProps) {
 export function HotelDetailsContent() {
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const [checkInDate, setcheckInDate] = useState<Date>();

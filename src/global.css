@@ -3,38 +3,22 @@
 
 @custom-variant dark (&:is(.dark *));
 
-/* custom */
 button {
   cursor: pointer;
 }
 nav {
   background: rgba(255, 255, 255, 0.025);
-  backdrop-filter: blur(4px);
+  backdrop-filter: blur(3px);
 }
 .nav-theme-icon:hover {
   box-shadow: 0 0 25px rgb(255, 255, 255);
-  background-color: rgba(255, 255, 255, 0.2);
 }
 .sheet-main-content {
   display: block;
-  padding: 1px 20px;
-  border-radius: 15px;
+  padding: 9px 25px;
+  border-radius: 25px;
 }
-.sign-in-btn:hover,
-.sheet-btn:hover,
-.sheet-signin:hover {
-  background-color: rgba(255, 255, 255, 0.15);
-}
-.sign-up-btn,
-.sheet-signup {
-  background-color: rgba(255, 255, 255, 0.25);
-}
-.sign-up-btn:hover,
-.sheet-signup:hover {
-  background-color: rgba(255, 255, 255, 0.45);
-}
-
-@media (max-width : 64rem) {
+@media (max-width: 64rem) {
   .center-logo {
     justify-content: start;
     grid-column-start: 2;
@@ -43,29 +27,17 @@ nav {
   }
 }
 
-@media (max-width : 1000px) {
+@media (max-width: 1000px) {
   .right-nav {
     grid-column-start: 3;
   }
 }
-.nav-dropdown {
-  background-color: rgba(255, 255, 255, 0.1);
-}
-.nav-dropdown:hover {
-  background-color: rgba(255, 255, 255, 0.2);
-}
-.nav-dropdown-content {
-  background-color: rgba(255, 255, 255, 0.9);
-}
-@media (min-width : 1000px) {
+@media (min-width: 1000px) {
   .sheet {
     display: none;
   }
 }
-.sheet-btn:hover {
-  background-color: rgba(255, 255, 255, 0.1);
-}
-@media (max-width : 1000px) {
+@media (max-width: 1000px) {
   .left-nav,
   .right-nav-desktop {
     display: none;
@@ -74,64 +46,31 @@ nav {
 .sheetContent {
   background-color: rgba(82, 43, 15, 0.8);
 }
-.sheet-main-content:hover {
-  background-color: rgba(0, 0, 0, 0.3);
-}
 .sheet-theme-icon {
   background-color: rgb(114, 63, 26, 0.5);
 }
 .sheet-theme-icon:hover {
-  background-color: rgb(114, 63, 26);
   box-shadow: 0 0 20px rgb(255, 255, 255);
 }
 .rdp-nav {
   backdrop-filter: none !important;
 }
-.location{
-    background-color: aqua;
+@media (max-width: 748px) {
+  .hero-title {
+    font-size: 4rem;
+  }
 }
-@media (max-width : 748px){
-    .hero-title{
-        font-size: 4rem;
-    }
-}
-.switch-btn:hover{
-  background-color: oklch(100% 0.00011 271.152);
-  box-shadow: 0 0 10px rgb(255, 255, 255);
-}
-.prompt-search-btn:hover{
-  background-color: oklch(90.079% 0.14897 93.849);
-}
-.location-btn:hover{
-  background-color: oklch(93.443% 0.07568 96.159);
-}
-.checkIn-btn:hover{
-  background-color: oklch(98.316% 0.02914 96.417);
-}
-.checkout-btn:hover{
-  background-color: oklch(98.316% 0.02914 96.417);
-}
-.guest-btn:hover{
-  background-color: oklch(100% 0.00011 271.152);
-}
-.filter-search:hover{
-  background-color: oklch(90.079% 0.14897 93.849);
-}
-.location-dropdown-content{
-  background-color: rgba(255, 251, 235, 0.9);
-}
-.guest-dropdown-content{
+/* .guest-dropdown-content{
   background-color: rgba(255, 251, 235, 0.75);
+} */
+/* .location-dropdown-content{
+  background-color: rgba(255, 251, 235, 0.9);
 }
 .location-dropdown:hover{
   background-color: rgb(255, 251, 235);
 }
-.guest-dropdown:hover{
-  background-color: rgb(255, 251, 235);
-}
+ */
 
-
-/* shadCn */
 @theme inline {
   --radius-sm: calc(var(--radius) - 4px);
   --radius-md: calc(var(--radius) - 2px);
@@ -203,6 +142,32 @@ nav {
   --sidebar-accent-foreground: oklch(0.205 0 0);
   --sidebar-border: oklch(0.922 0 0);
   --sidebar-ring: oklch(0.708 0 0);
+
+  --hero-background: oklch(0% 0 0 / 0.3);
+  --location-filter: oklch(92.4% 0.12 95.746);
+  --checkin-filter: oklch(96% 0.08 96);
+  --checkout-filter: oklch(96% 0.08 96);
+  --guest-filter: oklch(98% 0.05 96);
+  --search-filter: oklch(85.539% 0.15729 92.965);
+  --location-filter-hover: oklch(93.443% 0.07568 96.159);
+  --checkin-filter-hover: oklch(98.316% 0.02914 96.417);
+  --checkout-filter-hover: oklch(98.316% 0.02914 96.417);
+  --guest-filter-hover: oklch(100% 0.00011 271.152);
+  --search-filter-hover: oklch(90.079% 0.14897 93.849);
+  --nav-theme-icon-hover: oklch(100% 0 0 / 0.2);
+  --nav-signup: oklch(53.86% 0.14978 23.568 / 0.15);
+  --nav-signin-hover: oklch(90% 0 0 / 0.2);
+  --nav-signup-hover: oklch(90% 0 0 / 0.3);
+  --nav-dropdown: oklch(1 0 0 / 15%);
+  --nav-dropdown-hover: oklch(100% 0 0 / 0.2);
+  --sheet-btn-hover: oklch(100% 0 0 / 0.1);
+  --sheet-main-content-hover: oklch(0% 0 0 / 0.3);
+  --sheet-theme-icon-hover: oklch(45% 0.12 50);
+
+  --guest-dropdown-content: oklch(100% 0.00011 271.152);
+  --guest-dropdown-content-hover: oklch(97% 0.0001 271.152);
+
+  --footer: oklch(0.205 0 0);
 }
 
 .dark {
@@ -237,6 +202,32 @@ nav {
   --sidebar-accent-foreground: oklch(0.985 0 0);
   --sidebar-border: oklch(1 0 0 / 10%);
   --sidebar-ring: oklch(0.556 0 0);
+
+  --hero-background: oklch(0% 0 0 / 0.5);
+  --location-filter: oklch(82.4% 0.12 95.746);
+  --checkin-filter: oklch(86% 0.08 96);
+  --checkout-filter: oklch(86% 0.08 96);
+  --guest-filter: oklch(88% 0.05 96);
+  --search-filter: oklch(75.539% 0.15729 92.965);
+  --location-filter-hover: oklch(83.443% 0.07568 96.159);
+  --checkin-filter-hover: oklch(88.316% 0.02914 96.417);
+  --checkout-filter-hover: oklch(88.316% 0.02914 96.417);
+  --guest-filter-hover: oklch(90% 0.00011 271.152);
+  --search-filter-hover: oklch(80.079% 0.14897 93.849);
+  --nav-theme-icon-hover: oklch(90% 0 0 / 0.2);
+  --nav-signup: oklch(1 0 0 / 10%);
+  --nav-signin-hover: oklch(100% 0 0 / 0.15);
+  --nav-signup-hover: oklch(100% 0 0 / 0.25);
+  --nav-dropdown: oklch(1 0 0 / 10%);
+  --nav-dropdown-hover: oklch(90% 0 0 / 0.2);
+  --sheet-btn-hover: oklch(90% 0 0 / 0.1);
+  --sheet-main-content-hover: oklch(10% 0 0 / 0.3);
+  --sheet-theme-icon-hover: oklch(35% 0.12 50);
+
+  --guest-dropdown-content: oklch(0% 0 0);
+  --guest-dropdown-content-hover: oklch(20% 0 0);
+
+  --footer: oklch(56.203% 0.00612 95.21);
 }
 
 @layer base {

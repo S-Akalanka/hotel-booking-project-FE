@@ -1,4 +1,3 @@
-import { useState } from "react";
 import logo from "../images/logo.png";
 import {
   Moon,
@@ -31,17 +30,42 @@ import {
   SignOutButton,
   UserButton,
 } from "@clerk/clerk-react";
+import { useEffect, useRef, useState } from "react";
 
-function Navigation() {
+function Navigation(props: any) {
   const navigate = useNavigate();
-  const [isDark, setDark] = useState(false);
+  const lastScrollY = useRef(0);
+  const [hidden, setHidden] = useState(false);
 
   const themeHandler = () => {
-    setDark(!isDark);
+    props.setTheme(props.theme === "dark" ? "light" : "dark");
   };
 
+  useEffect(() => {
+    const handleScroll = () => {
+      const currentScrollY = window.scrollY;
+
+      if (currentScrollY > lastScrollY.current && currentScrollY > 80) {
+        setHidden(true);
+      } else {
+        setHidden(false);
+      }
+      lastScrollY.current = currentScrollY;
+    };
+
+    window.addEventListener("scroll", handleScroll, { passive: true });
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
+
   return (
-    <nav className="grid grid-cols-3 items-center px-7 py-4 text-base z-10 fixed w-full top-0">
+    <nav
+      className={`
+        grid grid-cols-3 items-center px-7 py-4 text-base
+        fixed w-full top-0 z-10
+        transition-transform duration-300 ease-in-out
+        ${hidden ? "-translate-y-full" : "translate-y-0"}
+      `}
+    >
       {/* Left Nav */}
       <div className="left-nav flex gap-9  justify-start text-white">
         <a
@@ -77,9 +101,9 @@ function Navigation() {
         <div className="right-nav-desktop flex gap-10 justify-end items-center">
           <button
             onClick={themeHandler}
-            className="nav-theme-icon cursor-pointer text-white rounded-2xl"
+            className="nav-theme-icon cursor-pointer text-white rounded-2xl hover:bg-[var(--nav-theme-icon-hover)]"
           >
-            {isDark ? <Moon size={20} /> : <Sun size={21} />}
+            {props.theme === "light" ? <Moon size={20} /> : <Sun size={21} />}
           </button>
           {/* User Menu */}
           <SignedIn>
@@ -88,16 +112,16 @@ function Navigation() {
               <DropdownMenu>
                 <DropdownMenuTrigger
                   asChild
-                  className="nav-dropdown border-none py-6.5 cursor-pointer px-3 rounded-2xl"
+                  className=" border-none p-6 cursor-pointer rounded-3xl bg-[var(--nav-dropdown)] hover:bg-[var(--nav-dropdown-hover)]"
                 >
-                  <Button variant="ghost">
-                    <User className="h-4 w-4 text-black" />
+                  <Button className="text-white">
+                    <User className="h-4 w-4 " />
                     Profile
                   </Button>
                 </DropdownMenuTrigger>
                 <DropdownMenuContent
                   align="end"
-                  className="nav-dropdown-content w-56 text-black"
+                  className=" w-56"
                 >
                   <DropdownMenuItem
                     className="cursor-pointer"
@@ -105,7 +129,7 @@ function Navigation() {
                       navigate("/users", { state: { tab: "profile" } })
                     }
                   >
-                    <User className="mr-2 h-4 w-4 text-black" />
+                    <User className="mr-2 h-4 w-4" />
                     My Account
                   </DropdownMenuItem>
                   <DropdownMenuItem
@@ -114,7 +138,7 @@ function Navigation() {
                       navigate("/users", { state: { tab: "bookings" } })
                     }
                   >
-                    <Calendar className="mr-2 h-4 w-4 text-black" />
+                    <Calendar className="mr-2 h-4 w-4 " />
                     My Bookings
                   </DropdownMenuItem>
                   <DropdownMenuSeparator />
@@ -124,12 +148,12 @@ function Navigation() {
                       navigate("/users", { state: { tab: "settings" } })
                     }
                   >
-                    <Settings className="mr-2 h-4 w-4 text-black" />
+                    <Settings className="mr-2 h-4 w-4" />
                     Settings
                   </DropdownMenuItem>
-                  <DropdownMenuItem className="cursor-pointer" asChild>
+                  <DropdownMenuItem className="cursor-pointer w-full" asChild>
                     <SignOutButton>
-                      <button className="flex items-center space-x-2 w-full text-black">
+                      <button className="flex items-center justify-center space-x-2 w-full">
                         <LogOut className="mr-2 h-4 w-4" />
                         <span>Sign Out</span>
                       </button>
@@ -142,13 +166,12 @@ function Navigation() {
 
           <SignedOut>
             <div className="flex items-center space-x-2">
-              <Button
-                asChild
-                className="sign-in-btn  bg-transparent size-[50px] cursor-pointer p-3 rounded-3xl min-w-24"
+              <Button asChild
+                className="sign-in-btn text-white bg-transparent size-[22px] cursor-pointer p-6 rounded-4xl min-w-24 hover:bg-[var(--nav-signin-hover)]"
               >
                 <Link to={"/sign-in"}> Sign In</Link>
               </Button>
-              <Button className="sign-up-btn  size-[50px] cursor-pointer p-3 rounded-3xl min-w-24">
+              <Button className="text-white size-[22px] cursor-pointer p-6 rounded-4xl min-w-24 bg-[var(--nav-signup)] hover:bg-[var(--nav-signup-hover)]">
                 <Link to={"/sign-up"}> Sign Up</Link>
               </Button>
             </div>
@@ -158,28 +181,28 @@ function Navigation() {
         {/* Mobile Menu */}
         <Sheet>
           <SheetTrigger asChild className="sheet">
-            <Button className="sheet-btn bg-transparent h-12">
-              <Menu className="size-[33px]" />
+            <Button className="sheet-btn bg-transparent h-12 hover:bg-[var(--sheet-btn-hover)]">
+              <Menu className="size-[33px] text-white" />
             </Button>
           </SheetTrigger>
           <SheetContent className="sheetContent w-60 border-none ">
-            <ul className="text-white py-10 px-5 text-[24px] space-y-4">
+            <ul className="text-white py-10 px-5 text-[20px] space-y-4">
               <Link to="/">
                 <img src={logo} alt="Logo" className="w-24 m-auto pb-5" />
               </Link>
               <hr className="my-5"></hr>
               <li>
-                <a href="#" className="sheet-main-content">
+                <a href="#" className="sheet-main-content hover:bg-[var(--sheet-main-content-hover)]">
                   Experiences
                 </a>
               </li>
               <li>
-                <a href="#" className="sheet-main-content">
+                <a href="#" className="sheet-main-content hover:bg-[var(--sheet-main-content-hover)]">
                   Foods & Drinks
                 </a>
               </li>
               <li>
-                <a href="#" className="sheet-main-content">
+                <a href="#" className="sheet-main-content hover:bg-[var(--sheet-main-content-hover)]">
                   About
                 </a>
               </li>
@@ -188,16 +211,16 @@ function Navigation() {
             <SheetFooter className="space-y-5">
               <button
                 onClick={themeHandler}
-                className="cursor-pointer text-white"
+                className="cursor-pointer text-white text-[15px]"
               >
-                {isDark ? (
-                  <a className="sheet-theme-icon flex items-center justify-center gap-4 p-4 mx-5 rounded-4xl">
-                    <Moon size={25} />
+                {props.theme === "light" ? (
+                  <a className="sheet-theme-icon flex border items-center justify-center gap-3 p-4 mx-5 rounded-4xl hover:bg-[var(--sheet-theme-icon-hover)]">
+                    <Moon size={24} />
                     <p>Dark Mode</p>
                   </a>
                 ) : (
-                  <a className="sheet-theme-icon flex items-center justify-center gap-4 p-4 mx-5 rounded-4xl">
-                    <Sun size={26} />
+                  <a className="sheet-theme-icon flex border items-center justify-center gap-3 p-4 mx-5 rounded-4xl hover:bg-[var(--sheet-theme-icon-hover)]">
+                    <Sun size={24} />
                     <p>Light Mode</p>
                   </a>
                 )}
@@ -209,23 +232,21 @@ function Navigation() {
                     <UserButton />
                     <DropdownMenuTrigger
                       asChild
-                      className="nav-dropdown border-none py-7.5 px-3 rounded-2xl"
+                      className=" border-none py-6 px-7 rounded-2xl bg-[var(--nav-dropdown)] hover:bg-[var(--nav-dropdown-hover)]"
                     >
                       <Button
-                        variant="ghost"
-                        className="flex items-center space-x-2 text-xl"
+                        className="flex items-center space-x-2 text-[1.25rem] text-white "
                       >
-                        <User className="h-4 w-4 text-black" />
                         Profile
                       </Button>
                     </DropdownMenuTrigger>
                   </div>
                   <DropdownMenuContent
                     align="end"
-                    className="nav-dropdown-content w-60 p-3"
+                    className=" w-60 p-3"
                   >
                     <DropdownMenuItem
-                      className="text-[1.3rem]"
+                      className="text-[1rem]"
                       onClick={() =>
                         navigate("/users", { state: { tab: "profile" } })
                       }
@@ -234,7 +255,7 @@ function Navigation() {
                       My Account
                     </DropdownMenuItem>{" "}
                     <DropdownMenuItem
-                      className="text-[1.3rem]"
+                      className="text-[1rem]"
                       onClick={() =>
                         navigate("/users", { state: { tab: "bookings" } })
                       }
@@ -244,7 +265,7 @@ function Navigation() {
                     </DropdownMenuItem>
                     <DropdownMenuSeparator />
                     <DropdownMenuItem
-                      className="text-[1.3rem]"
+                      className="text-[1rem]"
                       onClick={() =>
                         navigate("/users", { state: { tab: "settings" } })
                       }
@@ -252,7 +273,7 @@ function Navigation() {
                       <Settings className="mr-2 h-4 w-4" />
                       Settings
                     </DropdownMenuItem>
-                    <DropdownMenuItem className="text-[1.3rem]">
+                    <DropdownMenuItem className="text-[1rem]">
                       <LogOut className="mr-2 h-4 w-4" />
                       Sign Out
                     </DropdownMenuItem>
@@ -266,7 +287,7 @@ function Navigation() {
                     <li>
                       <Link
                         to="/sign-in"
-                        className="sheet-signin py-3 px-5 rounded-4xl"
+                        className="sheet-signin py-3 px-10 rounded-4xl hover:bg-[var(--nav-signin-hover)]"
                       >
                         Sign In
                       </Link>
@@ -274,7 +295,7 @@ function Navigation() {
                     <li>
                       <Link
                         to="sign-up"
-                        className="sheet-signup py-3 px-5 rounded-4xl"
+                        className="sheet-signup py-3 px-8 rounded-4xl bg-[var(--nav-signup)] hover:bg-[var(--nav-signup-hover)]"
                       >
                         Sign Up
                       </Link>
