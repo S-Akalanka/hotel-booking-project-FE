@@ -7,24 +7,8 @@ import FilterSidebar from "./FilterSiderbar";
 import { Filter } from "lucide-react";
 import { useSelector } from "react-redux";
 
-export function HotelsSearchListing() {
-  const search = useSelector((state: any) => state.search);
-  const filters = {
-    query: search.query,
-    sortBy: search.sortBy,
-    page: search.page,
-    maxPrice: search.maxPrice,
-    minPrice: search.minPrice,
-    rating: search.rating,
-    amenities: search.amenities,
-  };
-
-  const {
-    data: hotels = [],
-    isLoading: isHotelsLoading,
-    isError: isHotelsError,
-    error: hotelsError,
-  } = useSearchHotelsQuery(filters);
+export function HotelsSearchListing(props: any) {
+  const hotels = props.hotels || [];
 
   return (
     <div className="min-h-screen bg-background">

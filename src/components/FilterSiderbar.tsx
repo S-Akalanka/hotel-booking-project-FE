@@ -88,9 +88,9 @@ export default function FilterSidebar() {
   };
 
   return (
-    <Card className="sticky top-24 h-screen">
-      <div className="flex items-center justify-between mb-6 px-4">
-        <h2 className="font-semibold text-lg">Filters</h2>
+    <Card className="sticky top-24 h-screen bg-gradient-to-tr from-amber-200/15 via-amber-100/15 to-white/10">
+      <div className="flex items-center justify-between px-4">
+        <h2 className="font-semibold text-[1.5rem]">Filters</h2>
         <Button variant="ghost" size="sm" onClick={handleClear}>
           Clear All
         </Button>

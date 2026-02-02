@@ -38,14 +38,6 @@ function AiHotelListings() {
           ))}
         </div>
       </section>
-
-      <section className="pb-16 flex justify-center">
-        <Link to="/hotels">
-          <Button className="transform transition-transform duration-300 hover:scale-103 border-solid border-[0.2px] border-black !px-[90px] py-6 rounded-3xl text-[1.25rem]">
-            View All <ArrowRight className="!w-6 !h-6" />
-          </Button>
-        </Link>
-      </section>
     </>
   );
 }

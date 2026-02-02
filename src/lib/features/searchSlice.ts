@@ -14,15 +14,6 @@ export const searchSlice = createSlice({
   name: "advanceFilter",
   initialState,
   reducers: {
-    setQuery: (state, action) => {
-      state.query = action.payload;
-    },
-    setSortBy: (state, action) => {
-      state.sortBy = action.payload;
-    },
-    setPage: (state, action) => {
-      state.page = action.payload;
-    },
     setMaxPrice: (state, action) => {
       state.maxPrice = action.payload;
     },
@@ -46,9 +37,6 @@ export const searchSlice = createSlice({
 });
 
 export const {
-  setQuery,
-  setSortBy,
-  setPage,
   setMaxPrice,
   setMinPrice,
   setRating,
