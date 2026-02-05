@@ -1,5 +1,7 @@
 import { useFilterHotelsQuery } from "@/lib/api";
 import HomeHotelCard from "./HomeHotelCard";
+import HomeHotelCardSkeleton from "./HomeHotelCardSkeleton";
+import ErrorMessage from "./ErrorMessage";
 import { useSelector } from "react-redux";
 
 export default function FilteredHotelListing() {
@@ -15,13 +17,24 @@ export default function FilteredHotelListing() {
     data: searchHotels,
     isLoading,
     isError,
-    // error,
+    error,
+    refetch,
   } = useFilterHotelsQuery(filters);
 
-
-  if (isLoading) return <p>Loading...</p>;
-
-  if (isError) return <p>Error</p>;
+  if (isError) {
+    return (
+      <ErrorMessage
+        title="Failed to search hotels"
+        message={
+          error && typeof error === "object" && "data" in error
+            ? String(error.data || "Unable to search hotels. Please try again.")
+            : "Unable to search hotels. Please check your filters and try again."
+        }
+        onRetry={() => refetch()}
+        className="mt-20"
+      />
+    );
+  }
 
   return (
     <>
@@ -36,9 +49,15 @@ export default function FilteredHotelListing() {
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-          {searchHotels?.slice(0, 6).map((hotel: any, index: number) => (
-            <HomeHotelCard key={index} hotel={hotel} index={index} />
-          ))}
+          {isLoading ? (
+            Array.from({ length: 6 }).map((_, index) => (
+              <HomeHotelCardSkeleton key={index} />
+            ))
+          ) : (
+            searchHotels?.slice(0, 6).map((hotel: any, index: number) => (
+              <HomeHotelCard key={index} hotel={hotel} index={index} />
+            ))
+          )}
         </div>
       </section>
     </>

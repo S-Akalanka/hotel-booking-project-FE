@@ -1,6 +1,8 @@
 import { useGetHotelsByAiSearchQuery } from "@/lib/api";
 import { useSelector } from "react-redux";
 import HomeHotelCard from "./HomeHotelCard";
+import HomeHotelCardSkeleton from "./HomeHotelCardSkeleton";
+import ErrorMessage from "./ErrorMessage";
 import { Link } from "react-router";
 import { Button } from "./ui/button";
 import { ArrowRight } from "lucide-react";
@@ -13,11 +15,23 @@ function AiHotelListings() {
     isLoading: isHotelsLoading,
     isError: isHotelsError,
     error: hotelsError,
+    refetch,
   } = useGetHotelsByAiSearchQuery(query);
 
-  if (isHotelsLoading) return <p>Loading...</p>;
-
-  if (isHotelsError) return <p>Error</p>;
+  if (isHotelsError) {
+    return (
+      <ErrorMessage
+        title="Failed to load hotels"
+        message={
+          hotelsError && typeof hotelsError === "object" && "data" in hotelsError
+            ? String(hotelsError.data || "Unable to fetch hotels. Please try again.")
+            : "Unable to fetch hotels. Please check your connection and try again."
+        }
+        onRetry={() => refetch()}
+        className="mt-20"
+      />
+    );
+  }
 
   return (
     <>
@@ -33,9 +47,15 @@ function AiHotelListings() {
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-          {hotels.slice(0, 6).map((hotel: any, index: number) => (
-            <HomeHotelCard key={index} hotel={hotel} index={index} />
-          ))}
+          {isHotelsLoading ? (
+            Array.from({ length: 6 }).map((_, index) => (
+              <HomeHotelCardSkeleton key={index} />
+            ))
+          ) : (
+            hotels?.slice(0, 6).map((hotel: any, index: number) => (
+              <HomeHotelCard key={index} hotel={hotel} index={index} />
+            ))
+          )}
         </div>
       </section>
     </>

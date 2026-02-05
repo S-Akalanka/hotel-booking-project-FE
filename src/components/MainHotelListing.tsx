@@ -2,7 +2,9 @@ import { Button } from "./ui/button";
 import { useGetAllHotelsQuery } from "@/lib/api";
 import { Link } from "react-router";
 import HomeHotelCard from "./HomeHotelCard";
+import HomeHotelCardSkeleton from "./HomeHotelCardSkeleton";
 import LocationListings from "./LocationListings";
+import ErrorMessage from "./ErrorMessage";
 import { ArrowRight } from "lucide-react";
 
 export default function MainHotelListing() {
@@ -10,14 +12,24 @@ export default function MainHotelListing() {
     data: hotels = [],
     isLoading: isHotelsLoading,
     isError: isHotelsError,
-    // error: hotelsError,
+    error: hotelsError,
+    refetch,
   } = useGetAllHotelsQuery(undefined);
 
-  if (isHotelsLoading) 
-    return <p>Loading...</p>;
-
-  if (isHotelsError) 
-    return <p>Error</p>;
+  if (isHotelsError) {
+    return (
+      <ErrorMessage
+        title="Failed to load hotels"
+        message={
+          hotelsError && typeof hotelsError === "object" && "data" in hotelsError
+            ? String(hotelsError.data || "Unable to fetch hotels. Please try again.")
+            : "Unable to fetch hotels. Please check your connection and try again."
+        }
+        onRetry={() => refetch()}
+        className="mt-20"
+      />
+    );
+  }
 
   return (
     <>
@@ -34,13 +46,19 @@ export default function MainHotelListing() {
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-          {hotels.slice(0,6).map((hotel: any, index: number) => (
-            <HomeHotelCard
-            key={index}
-            hotel = {hotel}
-            index = {index}
-            />
-          ))}
+          {isHotelsLoading ? (
+            Array.from({ length: 6 }).map((_, index) => (
+              <HomeHotelCardSkeleton key={index} />
+            ))
+          ) : (
+            hotels.slice(0,6).map((hotel: any, index: number) => (
+              <HomeHotelCard
+                key={index}
+                hotel = {hotel}
+                index = {index}
+              />
+            ))
+          )}
         </div>
       </section>
 

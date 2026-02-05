@@ -20,6 +20,7 @@ import {
 import { useSelector } from "react-redux";
 import { Button } from "@/components/ui/button";
 import { useSearchHotelsQuery } from "@/lib/api";
+import { Skeleton } from "@/components/ui/skeleton";
 
 export default function HotelsPageContent() {
   const [inputText, setInputText] = useState("");
@@ -38,7 +39,7 @@ export default function HotelsPageContent() {
     amenities: search.amenities,
   };
 
-  const { data, isLoading, isError, error } = useSearchHotelsQuery(filters);
+  const { data, isLoading, isError, error, refetch } = useSearchHotelsQuery(filters);
 
   const hotels = data?.hotels ?? [];
   const totalResults = data?.totalResults ?? 0;
@@ -55,10 +56,21 @@ export default function HotelsPageContent() {
     search.amenities,
   ]);
 
+  const [backgroundLoaded, setBackgroundLoaded] = useState(false);
+
+  useEffect(() => {
+    const bgImage = new Image();
+    bgImage.onload = () => setBackgroundLoaded(true);
+    bgImage.src = "https://images.unsplash.com/photo-1594896733292-9a77b5809c63?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D";
+  }, []);
+
   return (
     <>
-      <div className="hotels-background py-8 pt-36">
-        <div className="max-w-7xl mx-auto px-4">
+      <div className="hotels-background py-8 pt-36 relative">
+        {!backgroundLoaded && (
+          <Skeleton className="absolute inset-0 w-full h-full bg-black/30" />
+        )}
+        <div className="max-w-7xl mx-auto px-4 relative z-10">
           <h1 className="text-4xl md:text-5xl mb-4 font-sans text-white">
             Find Your Perfect Stay
           </h1>
@@ -95,7 +107,13 @@ export default function HotelsPageContent() {
         </div>
       </div>
 
-      <HotelsSearchListing hotels={hotels} />
+      <HotelsSearchListing 
+        hotels={hotels} 
+        isLoading={isLoading} 
+        isError={isError}
+        error={error}
+        onRetry={() => refetch()}
+      />
 
       {/* Pagination */}
       <div className="m-12 flex justify-center bg-transparent">
