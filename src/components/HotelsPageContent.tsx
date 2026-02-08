@@ -70,6 +70,7 @@ export default function HotelsPageContent() {
         {!backgroundLoaded && (
           <Skeleton className="absolute inset-0 w-full h-full bg-black/30" />
         )}
+        <div className="absolute inset-0 bg-[var(--hotels-background)]"></div>
         <div className="max-w-7xl mx-auto px-4 relative z-10">
           <h1 className="text-4xl md:text-5xl mb-4 font-sans text-white">
             Find Your Perfect Stay

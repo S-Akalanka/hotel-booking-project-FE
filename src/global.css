@@ -166,6 +166,8 @@ nav {
   --guest-dropdown-content: oklch(100% 0.00011 271.152);
   --guest-dropdown-content-hover: oklch(97% 0.0001 271.152);
 
+  --hotels-background: oklch(0% 0 0 / 0.2);
+
   --footer: oklch(0.205 0 0);
   --luxury-gold: oklch(70% 0.15 85);
 }
@@ -226,6 +228,8 @@ nav {
 
   --guest-dropdown-content: oklch(0% 0 0);
   --guest-dropdown-content-hover: oklch(20% 0 0);
+
+  --hotels-background: oklch(0% 0 0 / 0.3);
 
   --footer: oklch(56.203% 0.00612 95.21);
   --luxury-gold: oklch(75% 0.15 85);
