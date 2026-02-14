@@ -35,7 +35,7 @@ export default function MainHotelListing() {
     <>
 
       {/* Featured Hotels */}
-      <section className="py-16 px-4 max-w-7xl mx-auto">
+      <section className="py-9 px-4 max-w-7xl mx-auto">
         <div className="text-center mb-12">
           <h2 className="text-3xl md:text-4xl mb-4 mt-20">
             Featured Luxury Hotels
@@ -64,7 +64,7 @@ export default function MainHotelListing() {
 
       <section className="pb-16 flex justify-center">
         <Link to="/hotels">
-          <Button className="transform transition-transform duration-300 hover:scale-103 border-solid border-[0.2px] border-black !px-[90px] py-6 rounded-3xl text-[1.25rem]">
+          <Button className="transform transition-transform duration-300 hover:scale-103 border-solid hover:shadow-2xl border-[0.2px] border-black !px-[90px] py-6 rounded-3xl text-[1.25rem]">
             View All <ArrowRight className="!w-6 !h-6" />
           </Button>
         </Link>

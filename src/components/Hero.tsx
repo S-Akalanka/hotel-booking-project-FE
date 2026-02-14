@@ -3,7 +3,11 @@ import { useEffect, useState } from "react";
 import HeroFilters from "./HeroFilters";
 import { Skeleton } from "./ui/skeleton";
 
-function Hero() {
+type HeroProps = {
+  onSearch: () => void;
+};
+
+function Hero({ onSearch }: HeroProps) {
   const [currentSlide, setCurrentSlide] = useState(0);
   const [imagesLoaded, setImagesLoaded] = useState<boolean[]>(
     new Array(heroImages.length).fill(false),
@@ -60,7 +64,7 @@ function Hero() {
       </div>
 
       <div className="absolute inset-0 flex flex-col items-center justify-end mb-[5%] gap-5">
-        <HeroFilters />
+        <HeroFilters onSearch={onSearch} />
       </div>
     </div>
   );

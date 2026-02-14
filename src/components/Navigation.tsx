@@ -31,6 +31,7 @@ import {
   UserButton,
 } from "@clerk/clerk-react";
 import { useEffect, useRef, useState } from "react";
+import { DialogDescription, DialogTitle } from "@radix-ui/react-dialog";
 
 function Navigation(props: any) {
   const navigate = useNavigate();
@@ -186,6 +187,8 @@ function Navigation(props: any) {
             </Button>
           </SheetTrigger>
           <SheetContent className="sheetContent w-60 border-none ">
+            <DialogTitle className="sr-only">Navigation Menu</DialogTitle>
+            <DialogDescription className="sr-only">Use this menu to navigate through the site</DialogDescription>
             <ul className="text-white py-10 px-5 text-[20px] space-y-4">
               <Link to="/">
                 <img src={logo} alt="Logo" className="w-24 m-auto pb-5" />

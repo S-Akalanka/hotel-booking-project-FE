@@ -36,15 +36,17 @@ export default function FilteredHotelListing() {
     );
   }
 
+  const hotels = searchHotels || [];
+
   return (
     <>
-      <section className="py-16 px-4 max-w-7xl mx-auto">
+      <section className="py-9 px-4 max-w-7xl mx-auto">
         <div className="text-center mb-12">
           <h2 className="text-3xl md:text-4xl mb-4 mt-20">
             Search Results
           </h2>
-          {searchHotels.length === 0
-            ? <p className="text-lg pb-64">No hotels found. Try adjusting your filters.</p>
+          {hotels.length === 0
+            ? <p className="text-lg">No hotels found. Try adjusting your filters.</p>
             : <p className="text-lg">Handpicked exceptional properties for your perfect stay</p>}
         </div>
 

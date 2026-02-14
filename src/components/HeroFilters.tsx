@@ -67,8 +67,12 @@ const filterFormSchema = z
       path: ["location"],
     }
   );
+ 
+type HeroProps = {
+  onSearch: () => void;
+};
 
-export default function HeroFilters() {
+export default function HeroFilters({ onSearch }: HeroProps) {
   const [aiInput, setAiInput] = useState(false);
   const [open, setOpen] = useState(false);
   const { isSignedIn } = useUser();
@@ -77,9 +81,9 @@ export default function HeroFilters() {
 
   const {
     data: locations = [],
-    // isLoading: isLocationsLoading,
-    // isError: isLocationsError,
-    // error: locationsError,
+    isLoading: isLocationsLoading,
+    isError: isLocationsError,
+    error: locationsError,
   } = useGetAllLocationsQuery(undefined);
 
   const switchButtonHandler = () => {
@@ -196,6 +200,7 @@ export default function HeroFilters() {
             <Button
               type="submit"
               className="prompt-search-btn transform transition-transform duration-300 hover:scale-103 bg-[var(--search-filter)] hover:bg-[var(--search-filter-hover)] w-28 max-[748px]:w-20 rounded-4xl text-black py-7 text-[1rem]"
+              onClick={onSearch}
             >
               <Search />
               <b>Search</b>
@@ -348,6 +353,7 @@ export default function HeroFilters() {
               <Button
                 type="submit"
                 className={`filter-search ${filter} border-none transform transition-transform duration-300 hover:scale-103 filter-search bg-[var(--search-filter)] hover:bg-[var(--search-filter-hover)] ml-3 w-28 max-[748px]:w-20 rounded-4xl`}
+                onClick={onSearch}
               >
                 <Search />
                 <b>Search</b>
