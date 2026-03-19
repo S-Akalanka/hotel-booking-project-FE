@@ -3,7 +3,7 @@ import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 export const api = createApi({
   reducerPath: "api",
   baseQuery: fetchBaseQuery({
-    baseUrl: "http://localhost:8000/api/",
+    baseUrl: import.meta.env.VITE_BACKEND_URL || "http://localhost:8000/api/",
     prepareHeaders: async (headers) => {
       if (window.Clerk && window.Clerk.session) {
         try {
