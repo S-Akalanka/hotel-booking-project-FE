@@ -3,28 +3,18 @@ import { Card } from "./ui/card";
 import { Sheet, SheetContent, SheetTrigger } from "./ui/sheet";
 import { useSearchHotelsQuery } from "@/lib/api";
 import HotelsPageCard from "./HotelsPageCard";
+import HotelsPageCardSkeleton from "./HotelsPageCardSkeleton";
+import ErrorMessage from "./ErrorMessage";
 import FilterSidebar from "./FilterSiderbar";
 import { Filter } from "lucide-react";
 import { useSelector } from "react-redux";
 
-export function HotelsSearchListing() {
-  const search = useSelector((state: any) => state.search);
-  const filters = {
-    query: search.query,
-    sortBy: search.sortBy,
-    page: search.page,
-    maxPrice: search.maxPrice,
-    minPrice: search.minPrice,
-    rating: search.rating,
-    amenities: search.amenities,
-  };
-
-  const {
-    data: hotels = [],
-    isLoading: isHotelsLoading,
-    isError: isHotelsError,
-    error: hotelsError,
-  } = useSearchHotelsQuery(filters);
+export function HotelsSearchListing(props: any) {
+  const hotels = props.hotels || [];
+  const isLoading = props.isLoading || false;
+  const isError = props.isError || false;
+  const error = props.error;
+  const onRetry = props.onRetry;
 
   return (
     <div className="min-h-screen bg-background">
@@ -53,10 +43,32 @@ export function HotelsSearchListing() {
           </Sheet>
 
           {/* Hotels List */}
-          <div className="space-y-6">
-            {hotels.map((hotel: any, index: number) => (
-              <HotelsPageCard key={hotel._id} hotel={hotel} index={index} />
-            ))}
+          <div className="space-y-6 flex-1">
+            {isError ? (
+              <div className="w-full">
+                <ErrorMessage
+                  title="Failed to load hotels"
+                  message={
+                    error && typeof error === "object" && "data" in error
+                      ? String(error.data || "Unable to fetch hotels. Please try again.")
+                      : "Unable to fetch hotels. Please check your connection and try again."
+                  }
+                  onRetry={onRetry}
+                />
+              </div>
+            ) : isLoading ? (
+              Array.from({ length: 5 }).map((_, index) => (
+                <HotelsPageCardSkeleton key={index} />
+              ))
+            ) : hotels.length === 0 ? (
+              <div className="text-center py-16">
+                <p className="text-muted-foreground text-lg">No hotels found. Try adjusting your search criteria.</p>
+              </div>
+            ) : (
+              hotels.map((hotel: any, index: number) => (
+                <HotelsPageCard key={hotel._id} hotel={hotel} index={index} />
+              ))
+            )}
           </div>
         </div>
       </div>

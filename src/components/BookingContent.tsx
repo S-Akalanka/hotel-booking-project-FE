@@ -65,7 +65,7 @@ export function BookingContent() {
     const diffDays = diffTime / (1000 * 60 * 60 * 24);
 
     // Return at least 0 (avoid negatives)
-    return diffDays > 0 ? diffDays : 0;
+    return diffDays > 0 ? diffDays : 1;
   };
 
   const { user } = useUser();
@@ -113,11 +113,11 @@ export function BookingContent() {
   return (
     <div className="min-h-screen bg-background">
       {/* Header */}
-      <div className="border-b pt-25 bg-gray-400">
+      <div className="border-b pt-25 booking-background">
         <div className="max-w-6xl mx-auto px-4 py-4">
           <Button
             variant="ghost"
-            // onClick={() => onPageChange('hotel-detail')}
+            onClick={() => navigate(`/hotels/${_id}`)}
             className="mb-4"
           >
             <ChevronLeft className="h-4 w-4 mr-2" />

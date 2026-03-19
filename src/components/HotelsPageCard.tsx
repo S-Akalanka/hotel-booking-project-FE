@@ -9,6 +9,10 @@ import { Link } from "react-router";
 export default function HotelsPageCard(props: any) {
   const { hotel, index } = props;
 
+  if (!hotel || !hotel._id) {
+    return null;
+  }
+
   const amenityIcons = {
     Wifi: Wifi,
     Spa: Waves,
@@ -24,8 +28,10 @@ export default function HotelsPageCard(props: any) {
   };
 
   // Handle different data structures
-  const hotelImage = hotel.image || (hotel.images && hotel.images[0]);
+  const hotelImage = hotel.image || (hotel.images && hotel.images[0]) || "";
   const reviewsCount = typeof hotel.reviews === "number" ? hotel.reviews : (hotel.reviews?.length || 0);
+  const amenities = hotel.amenities || [];
+  const hasMoreAmenities = amenities.length > 4;
 
   return (
     <motion.div
@@ -94,33 +100,40 @@ export default function HotelsPageCard(props: any) {
             </span>
           </div>
 
-          <p className="text-sm text-muted-foreground mb-4">{hotel.description}</p>
+          {hotel.description && (
+            <p className="text-sm text-muted-foreground mb-4">{hotel.description}</p>
+          )}
 
-          <div className="flex flex-wrap gap-2 mb-4">
-            {hotel.amenities.slice(0, 4).map((amenity: any, idx: number) => {
-              // Handle both string and object formats
-              const amenityName = typeof amenity === "string" ? amenity : amenity.name;
-              const IconComponent = amenityIcons[amenityName as keyof typeof amenityIcons];
-              return (
-                <Badge
-                  key={amenityName || idx}
-                  variant="secondary"
-                  className="text-xs flex items-center"
-                >
-                  {IconComponent && <IconComponent className="w-3 h-3 mr-1" />}
-                  {amenityName}
+          {amenities.length > 0 && (
+            <div className="flex flex-wrap gap-2 mb-4">
+              {amenities.slice(0, 4).map((amenity: any, idx: number) => {
+                // Handle both string and object formats
+                const amenityName = typeof amenity === "string" ? amenity : amenity?.name || "";
+                const IconComponent = amenityIcons[amenityName as keyof typeof amenityIcons];
+                return (
+                  <Badge
+                    key={amenityName || idx}
+                    variant="secondary"
+                    className="text-xs flex items-center"
+                  >
+                    {IconComponent && <IconComponent className="w-3 h-3 mr-1" />}
+                    {amenityName}
+                  </Badge>
+                );
+              })}
+              {hasMoreAmenities && (
+                <Badge variant="outline" className="text-xs">
+                  +{amenities.length - 4} more
                 </Badge>
-              );
-            })}
-            {hotel.amenities.length > 4 && (
-              <Badge variant="outline" className="text-xs">
-                +{hotel.amenities.length - 4} more
-              </Badge>
-            )}
-          </div>
+              )}
+            </div>
+          )}
 
           <div className="flex gap-2">
-            <Button asChild className="flex-1">
+            <Button asChild className="flex-1 bg-gradient-to-br text-black 
+           from-[#e0c050] via-[#f1d77a] to-[#fff2b8]
+           hover:from-[#d4b440] hover:via-[#e8cc65] hover:to-[#ffe8a3]
+           transition-all duration-300">
               <Link to={`/hotels/${hotel._id}`}>Book Now</Link>
             </Button>
           </div>

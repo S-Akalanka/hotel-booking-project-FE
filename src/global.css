@@ -7,7 +7,7 @@ button {
   cursor: pointer;
 }
 nav {
-  background: rgba(255, 255, 255, 0.025);
+  background: rgba(0, 0, 0, 0.025);
   backdrop-filter: blur(3px);
 }
 .nav-theme-icon:hover {
@@ -60,16 +60,31 @@ nav {
     font-size: 4rem;
   }
 }
-/* .guest-dropdown-content{
-  background-color: rgba(255, 251, 235, 0.75);
-} */
-/* .location-dropdown-content{
-  background-color: rgba(255, 251, 235, 0.9);
+
+ .hotels-background{
+  background-image: url("https://images.unsplash.com/photo-1594896733292-9a77b5809c63?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D");
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+  background-color: #f0f0f0; 
 }
-.location-dropdown:hover{
-  background-color: rgb(255, 251, 235);
+.account-background {
+  background-image: url("https://images.unsplash.com/photo-1632494425431-e8b9bc198390?q=80&w=1740&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D");
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+  background-color: #f0f0f0; 
 }
- */
+.booking-background {
+  background-image: url("https://images.unsplash.com/photo-1541471943749-e5976783f6c3?q=80&w=1742&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D");
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+  background-color: #f0f0f0; 
+}
 
 @theme inline {
   --radius-sm: calc(var(--radius) - 4px);
@@ -139,7 +154,7 @@ nav {
   --sidebar-primary: oklch(0.205 0 0);
   --sidebar-primary-foreground: oklch(0.985 0 0);
   --sidebar-accent: oklch(0.97 0 0);
-  --sidebar-accent-foreground: oklch(0.205 0 0);
+  --sidebar-accent-foreground: oklch(10.889% 0.00301 17.398);
   --sidebar-border: oklch(0.922 0 0);
   --sidebar-ring: oklch(0.708 0 0);
 
@@ -148,14 +163,14 @@ nav {
   --checkin-filter: oklch(96% 0.08 96);
   --checkout-filter: oklch(96% 0.08 96);
   --guest-filter: oklch(98% 0.05 96);
-  --search-filter: oklch(85.539% 0.15729 92.965);
+  --search-filter: oklch(86.164% 0.14848 93.703);
   --location-filter-hover: oklch(93.443% 0.07568 96.159);
   --checkin-filter-hover: oklch(98.316% 0.02914 96.417);
   --checkout-filter-hover: oklch(98.316% 0.02914 96.417);
   --guest-filter-hover: oklch(100% 0.00011 271.152);
   --search-filter-hover: oklch(90.079% 0.14897 93.849);
   --nav-theme-icon-hover: oklch(100% 0 0 / 0.2);
-  --nav-signup: oklch(53.86% 0.14978 23.568 / 0.15);
+  --nav-signup: oklch(1 0 0 / 30%);
   --nav-signin-hover: oklch(90% 0 0 / 0.2);
   --nav-signup-hover: oklch(90% 0 0 / 0.3);
   --nav-dropdown: oklch(1 0 0 / 15%);
@@ -167,7 +182,10 @@ nav {
   --guest-dropdown-content: oklch(100% 0.00011 271.152);
   --guest-dropdown-content-hover: oklch(97% 0.0001 271.152);
 
+  --hotels-background: oklch(0% 0 0 / 0.2);
+
   --footer: oklch(0.205 0 0);
+  --luxury-gold: oklch(70% 0.15 85);
 }
 
 .dark {
@@ -208,7 +226,7 @@ nav {
   --checkin-filter: oklch(86% 0.08 96);
   --checkout-filter: oklch(86% 0.08 96);
   --guest-filter: oklch(88% 0.05 96);
-  --search-filter: oklch(75.539% 0.15729 92.965);
+  --search-filter: oklch(82.538% 0.15447 93.899);
   --location-filter-hover: oklch(83.443% 0.07568 96.159);
   --checkin-filter-hover: oklch(88.316% 0.02914 96.417);
   --checkout-filter-hover: oklch(88.316% 0.02914 96.417);
@@ -227,7 +245,10 @@ nav {
   --guest-dropdown-content: oklch(0% 0 0);
   --guest-dropdown-content-hover: oklch(20% 0 0);
 
+  --hotels-background: oklch(0% 0 0 / 0.3);
+
   --footer: oklch(56.203% 0.00612 95.21);
+  --luxury-gold: oklch(75% 0.15 85);
 }
 
 @layer base {

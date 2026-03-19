@@ -3,7 +3,11 @@ import FilteredHotelListing from "./FilteredHotelListing";
 import MainHotelListing from "./MainHotelListing";
 import AiHotelListings from "./AiHotelListings";
 
-export default function HotelView() {
+type HotelViewProps = {
+  resultRef: React.RefObject<HTMLDivElement | null>;
+};
+
+export default function HotelView({ resultRef }: HotelViewProps) {
   const filter = useSelector((state: any) => state.filter);
   const query = useSelector((state: any) => state.aiSearch.query);
 
@@ -21,11 +25,19 @@ export default function HotelView() {
         filterForm.checkOut !== "" &&
         filterForm.guest !== 0)
     ) {
-      return <FilteredHotelListing />;
+      return (
+        <div ref={resultRef}>
+          <FilteredHotelListing />
+        </div>
+      );
     } else {
       return <MainHotelListing />;
     }
   } else {
-    return <AiHotelListings />;
+    return (
+      <div ref={resultRef}>
+        <AiHotelListings />
+      </div>
+    );
   }
 }

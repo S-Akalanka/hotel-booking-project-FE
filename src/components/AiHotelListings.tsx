@@ -1,6 +1,8 @@
 import { useGetHotelsByAiSearchQuery } from "@/lib/api";
 import { useSelector } from "react-redux";
 import HomeHotelCard from "./HomeHotelCard";
+import HomeHotelCardSkeleton from "./HomeHotelCardSkeleton";
+import ErrorMessage from "./ErrorMessage";
 import { Link } from "react-router";
 import { Button } from "./ui/button";
 import { ArrowRight } from "lucide-react";
@@ -13,16 +15,28 @@ function AiHotelListings() {
     isLoading: isHotelsLoading,
     isError: isHotelsError,
     error: hotelsError,
+    refetch,
   } = useGetHotelsByAiSearchQuery(query);
 
-  if (isHotelsLoading) return <p>Loading...</p>;
-
-  if (isHotelsError) return <p>Error</p>;
+  if (isHotelsError) {
+    return (
+      <ErrorMessage
+        title="Failed to load hotels"
+        message={
+          hotelsError && typeof hotelsError === "object" && "data" in hotelsError
+            ? String(hotelsError.data || "Unable to fetch hotels. Please try again.")
+            : "Unable to fetch hotels. Please check your connection and try again."
+        }
+        onRetry={() => refetch()}
+        className="mt-20"
+      />
+    );
+  }
 
   return (
     <>
       {/* Featured Hotels */}
-      <section className="py-16 px-4 max-w-7xl mx-auto">
+      <section className="py-9 px-4 max-w-7xl mx-auto">
         <div className="text-center mb-12">
           <h2 className=" text-3xl md:text-4xl mb-4 mt-20">
             Featured Luxury Hotels
@@ -33,18 +47,16 @@ function AiHotelListings() {
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-          {hotels.slice(0, 6).map((hotel: any, index: number) => (
-            <HomeHotelCard key={index} hotel={hotel} index={index} />
-          ))}
+          {isHotelsLoading ? (
+            Array.from({ length: 6 }).map((_, index) => (
+              <HomeHotelCardSkeleton key={index} />
+            ))
+          ) : (
+            hotels?.slice(0, 6).map((hotel: any, index: number) => (
+              <HomeHotelCard key={index} hotel={hotel} index={index} />
+            ))
+          )}
         </div>
-      </section>
-
-      <section className="pb-16 flex justify-center">
-        <Link to="/hotels">
-          <Button className="transform transition-transform duration-300 hover:scale-103 border-solid border-[0.2px] border-black !px-[90px] py-6 rounded-3xl text-[1.25rem]">
-            View All <ArrowRight className="!w-6 !h-6" />
-          </Button>
-        </Link>
       </section>
     </>
   );

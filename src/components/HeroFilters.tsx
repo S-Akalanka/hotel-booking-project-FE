@@ -67,19 +67,23 @@ const filterFormSchema = z
       path: ["location"],
     }
   );
+ 
+type HeroProps = {
+  onSearch: () => void;
+};
 
-export default function HeroFilters() {
+export default function HeroFilters({ onSearch }: HeroProps) {
   const [aiInput, setAiInput] = useState(false);
   const [open, setOpen] = useState(false);
   const { isSignedIn } = useUser();
 
-  const dispatch = useDispatch();
+  const dispatch = useDispatch();``
 
   const {
     data: locations = [],
-    // isLoading: isLocationsLoading,
-    // isError: isLocationsError,
-    // error: locationsError,
+    isLoading: isLocationsLoading,
+    isError: isLocationsError,
+    error: locationsError,
   } = useGetAllLocationsQuery(undefined);
 
   const switchButtonHandler = () => {
@@ -142,7 +146,7 @@ export default function HeroFilters() {
     <>
       <Button
         type="button"
-        className="ease-in-out text-black transform transition-transform duration-300 hover:scale-103 bg-gradient-to-br from-purple-300 via-white to-purple-100 text-[1.1rem] py-6 w-[140px] max-[748px]:w-[110px] max-[748px]:py-4 max-[748px]:text-[11px] rounded-3xl"
+        className="ease-in-out text-black transform transition-transform duration-300 hover:scale-103 bg-gradient-to-br from-purple-50 via-white to-purple-100 text-[1.1rem] py-6 w-[140px] max-[748px]:w-[110px] max-[748px]:py-4 max-[748px]:text-[11px] rounded-3xl"
         onClick={switchButtonHandler}
       >
         {aiInput ? (
@@ -157,10 +161,10 @@ export default function HeroFilters() {
               <Sparkles />
             </b>
             <GradientText
-              colors={["#111827", "#273449", "#3730a3", "#4f46e5", "#7c3aed"]}
-              animationSpeed={3}
+              colors={["#8b5cf6", "#a855f7", "#d946ef", "#ec4899", "#f472b6"]}
+              animationSpeed={4}
               showBorder={false}
-              className="custom-class bg-clip-text bg-transparent"
+              className="bg-clip-text bg-transparent"
             >
               <b>AI Search </b>
             </GradientText>
@@ -196,6 +200,7 @@ export default function HeroFilters() {
             <Button
               type="submit"
               className="prompt-search-btn transform transition-transform duration-300 hover:scale-103 bg-[var(--search-filter)] hover:bg-[var(--search-filter-hover)] w-28 max-[748px]:w-20 rounded-4xl text-black py-7 text-[1rem]"
+              onClick={onSearch}
             >
               <Search />
               <b>Search</b>
@@ -348,6 +353,7 @@ export default function HeroFilters() {
               <Button
                 type="submit"
                 className={`filter-search ${filter} border-none transform transition-transform duration-300 hover:scale-103 filter-search bg-[var(--search-filter)] hover:bg-[var(--search-filter-hover)] ml-3 w-28 max-[748px]:w-20 rounded-4xl`}
+                onClick={onSearch}
               >
                 <Search />
                 <b>Search</b>
