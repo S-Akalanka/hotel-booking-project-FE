@@ -29,6 +29,7 @@ import {
 import { useDispatch } from "react-redux";
 import { setBookingDetails } from "@/lib/features/bookingSlice";
 import GradientText from "./ui/GradientText/GradientText";
+import { toast, Toaster } from "sonner";
 
 export function HotelDetailsContent() {
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
@@ -43,6 +44,10 @@ export function HotelDetailsContent() {
   const navigate = useNavigate();
 
   const handleProceedToPayment = () => {
+    if (!checkInDate || !checkOutDate) {
+      toast.error("Please select both check-in and check-out dates.");
+      return;
+    }
     dispatch(
       setBookingDetails({
         checkInDate: checkInDate ? checkInDate.toISOString() : null,
@@ -96,7 +101,13 @@ export function HotelDetailsContent() {
     );
   const calculateNights = () => {
     if (checkInDate && checkOutDate) {
-      const diffTime = Math.abs(checkOutDate.getTime() - checkInDate.getTime());
+      const checkInTime = checkInDate.getTime();
+      const checkOutTime = checkOutDate.getTime();
+
+      if (checkInTime === checkOutTime) {
+        return 1;
+      }
+      const diffTime = Math.abs(checkOutTime - checkInTime);
       return Math.ceil(diffTime / (1000 * 60 * 60 * 24));
     }
     return 1;
@@ -110,7 +121,7 @@ export function HotelDetailsContent() {
 
   return (
     <div className="min-h-screen">
-      <div className="bg-gray-500 py-12 pt-16"></div>
+      <div className="bg-[#3D3831] py-12 pt-16"></div>
       <div className="w-full">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-6">
           <div
@@ -586,6 +597,7 @@ export function HotelDetailsContent() {
           </div>
         </div>
       </div>
+      <Toaster />
     </div>
   );
 }

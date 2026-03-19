@@ -11,10 +11,10 @@ import { useLocation } from "react-router";
 
 export function AccountContent() {
   const location = useLocation();
-  
+
   const { data: user, isLoading, isError, error } = useGetUserQuery(undefined);
 
-  const [activeTab, setActiveTab] = useState(location.state?.tab ||"profile");
+  const [activeTab, setActiveTab] = useState(location.state?.tab || "profile");
   const [userInfo, setUserInfo] = useState({
     firstName: "",
     lastName: "",
@@ -40,13 +40,15 @@ export function AccountContent() {
   return (
     <div className="min-h-screen bg-background">
       {/* Header */}
-      <div className="bg-gray-500 py-12 pt-32">
-        <div className="max-w-6xl mx-auto px-4">
+      <div className="account-background relative py-12 pt-32">
+        <div className="absolute inset-0 bg-[var(--hotels-background)]"></div>
+
+        <div className="max-w-6xl mx-auto px-4 relative z-10">
           <motion.div
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6 }}
-            className="flex items-center space-x-6"
+            className="flex items-center space-x-6 text-white"
           >
             <Avatar className="w-24 h-24 max-[748px]:w-18 max-[748px]:h-18">
               <AvatarImage src={userInfo.imageUrl} />
@@ -56,10 +58,10 @@ export function AccountContent() {
               </AvatarFallback>
             </Avatar>
             <div>
-              <h1 className="font-playfair text-3xl md:text-4xl max-[748px]:text-2xl mb-2">
+              <h1 className="font-playfair font-bold text-3xl md:text-4xl max-[748px]:text-2xl mb-2">
                 Welcome back, {userInfo.firstName}
               </h1>
-              <p className="text-black max-[748px]:text-[15px]">
+              <p className="max-[748px]:text-[15px]">
                 Manage your bookings, preferences, and account settings
               </p>
             </div>

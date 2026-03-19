@@ -88,9 +88,8 @@ export default function HotelsPageContent() {
               />
               <Button
                 className="bg-gradient-to-bl from-[#f0c419] via-[#ffc93d] to-[#ffe082] text-black
-           rounded-2xl
-           hover:from-[#f29f05] hover:via-[#ffb800] hover:to-[#ffd35c]
-           transform transition-transform duration-300 hover:scale-103 ease-in-out"
+                          rounded-2xl hover:from-[#f29f05] hover:via-[#ffb800] hover:to-[#ffd35c]
+                          transform transition-transform duration-300 hover:scale-103 ease-in-out"
                 onClick={() => setQuery(inputText)}
               >
                 Search

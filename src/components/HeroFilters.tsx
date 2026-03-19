@@ -11,7 +11,6 @@ import {
   Users,
   Search,
   SlidersHorizontal,
-  Ghost,
 } from "lucide-react";
 import { useState } from "react";
 import { toast, Toaster } from "sonner";
@@ -78,7 +77,7 @@ export default function HeroFilters({ onSearch }: HeroProps) {
   const [open, setOpen] = useState(false);
   const { isSignedIn } = useUser();
 
-  const dispatch = useDispatch();
+  const dispatch = useDispatch();``
 
   const {
     data: locations = [],
@@ -147,7 +146,7 @@ export default function HeroFilters({ onSearch }: HeroProps) {
     <>
       <Button
         type="button"
-        className="ease-in-out text-black transform transition-transform duration-300 hover:scale-103 bg-white hover:bg-gray-100 text-[1.1rem] py-6 w-[140px] max-[748px]:w-[110px] max-[748px]:py-4 max-[748px]:text-[11px] rounded-3xl"
+        className="ease-in-out text-black transform transition-transform duration-300 hover:scale-103 bg-gradient-to-br from-purple-50 via-white to-purple-100 text-[1.1rem] py-6 w-[140px] max-[748px]:w-[110px] max-[748px]:py-4 max-[748px]:text-[11px] rounded-3xl"
         onClick={switchButtonHandler}
       >
         {aiInput ? (

@@ -4,7 +4,6 @@ import Footer from "../Footer";
 import { useUser } from "@clerk/clerk-react";
 import { useCreateOrFetchUserMutation } from "@/lib/api";
 import { useEffect, useRef } from "react";
-import { useTheme } from "@/hooks/useTheme";
 
 export default function RootLayout() {
   const { user, isSignedIn, isLoaded } = useUser();
