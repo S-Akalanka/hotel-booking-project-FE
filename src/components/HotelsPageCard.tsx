@@ -130,8 +130,10 @@ export default function HotelsPageCard(props: any) {
           )}
 
           <div className="flex gap-2">
-            <Button asChild className="flex-1 bg-gradient-to-br text-black from-yellow-600 via-yellow-500 to-yellow-400
-                        hover:from-yellow-600 hover:via-yellow-400 hover:to-yellow-300 transition-all duration-300">
+            <Button asChild className="flex-1 bg-gradient-to-br text-black 
+           from-[#e0c050] via-[#f1d77a] to-[#fff2b8]
+           hover:from-[#d4b440] hover:via-[#e8cc65] hover:to-[#ffe8a3]
+           transition-all duration-300">
               <Link to={`/hotels/${hotel._id}`}>Book Now</Link>
             </Button>
           </div>

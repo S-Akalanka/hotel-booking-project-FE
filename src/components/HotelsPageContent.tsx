@@ -39,7 +39,8 @@ export default function HotelsPageContent() {
     amenities: search.amenities,
   };
 
-  const { data, isLoading, isError, error, refetch } = useSearchHotelsQuery(filters);
+  const { data, isLoading, isError, error, refetch } =
+    useSearchHotelsQuery(filters);
 
   const hotels = data?.hotels ?? [];
   const totalResults = data?.totalResults ?? 0;
@@ -61,7 +62,8 @@ export default function HotelsPageContent() {
   useEffect(() => {
     const bgImage = new Image();
     bgImage.onload = () => setBackgroundLoaded(true);
-    bgImage.src = "https://images.unsplash.com/photo-1594896733292-9a77b5809c63?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D";
+    bgImage.src =
+      "https://images.unsplash.com/photo-1594896733292-9a77b5809c63?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D";
   }, []);
 
   return (
@@ -85,7 +87,10 @@ export default function HotelsPageContent() {
                 onChange={(e) => setInputText(e.target.value)}
               />
               <Button
-                className="bg-gradient-to-bl from-yellow-600/80 via-yellow-400/80 to-white/80 rounded-2xl text-black hover:bg-yellow-300/40 transform transition-transform duration-300 hover:scale-103 ease-in-out"
+                className="bg-gradient-to-bl from-[#f0c419] via-[#ffc93d] to-[#ffe082] text-black
+           rounded-2xl
+           hover:from-[#f29f05] hover:via-[#ffb800] hover:to-[#ffd35c]
+           transform transition-transform duration-300 hover:scale-103 ease-in-out"
                 onClick={() => setQuery(inputText)}
               >
                 Search
@@ -108,9 +113,9 @@ export default function HotelsPageContent() {
         </div>
       </div>
 
-      <HotelsSearchListing 
-        hotels={hotels} 
-        isLoading={isLoading} 
+      <HotelsSearchListing
+        hotels={hotels}
+        isLoading={isLoading}
         isError={isError}
         error={error}
         onRetry={() => refetch()}

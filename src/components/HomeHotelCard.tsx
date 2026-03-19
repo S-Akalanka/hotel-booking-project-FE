@@ -39,7 +39,9 @@ export default function HomeHotelCard(props: any) {
           )}
         </div>
         <CardContent className="p-6">
-          <h3 className="font-playfair text-xl mb-2">{props.hotel.name || "Hotel Name"}</h3>
+          <h3 className="font-playfair text-xl mb-2">
+            {props.hotel.name || "Hotel Name"}
+          </h3>
           {props.hotel.location && (
             <p className="text-muted-foreground mb-4 flex items-center">
               <MapPin className="w-4 h-4 mr-1" />
@@ -49,9 +51,14 @@ export default function HomeHotelCard(props: any) {
           {amenities.length > 0 && (
             <div className="flex flex-wrap gap-2 mb-4">
               {amenities.slice(0, 4).map((amenity: any, idx: number) => {
-                const amenityName = typeof amenity === "string" ? amenity : amenity?.name || "";
+                const amenityName =
+                  typeof amenity === "string" ? amenity : amenity?.name || "";
                 return (
-                  <Badge key={amenityName || idx} variant="secondary" className="text-xs">
+                  <Badge
+                    key={amenityName || idx}
+                    variant="secondary"
+                    className="text-xs"
+                  >
                     {amenityName}
                   </Badge>
                 );
@@ -72,8 +79,11 @@ export default function HomeHotelCard(props: any) {
             </div>
             <Button
               asChild
-              className="bg-gradient-to-br text-black from-yellow-500 via-yellow-300 to-yellow-200
-                        hover:from-yellow-600 hover:via-yellow-400 hover:to-yellow-300 transition-all duration-300"
+              className="bg-gradient-to-br from-[#e0c050] via-[#f1d77a] to-[#fff2b8] text-black 
+             hover:from-[#d4b440] hover:via-[#e8cc65] hover:to-[#ffe8a3] 
+             shadow-md shadow-yellow-900/20 hover:shadow-yellow-800/30 
+             border border-yellow-400/30 hover:border-yellow-500/40 
+             transition-all duration-300"
             >
               <Link to={`/hotels/${props.hotel._id}`}>View Details</Link>
             </Button>

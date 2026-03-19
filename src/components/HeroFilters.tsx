@@ -146,7 +146,7 @@ export default function HeroFilters({ onSearch }: HeroProps) {
     <>
       <Button
         type="button"
-        className="ease-in-out text-black transform transition-transform duration-300 hover:scale-103 bg-gradient-to-br from-purple-200 via-white to-purple-100 text-[1.1rem] py-6 w-[140px] max-[748px]:w-[110px] max-[748px]:py-4 max-[748px]:text-[11px] rounded-3xl"
+        className="ease-in-out text-black transform transition-transform duration-300 hover:scale-103 hover:text-white bg-white text-[1.1rem] py-6 w-[140px] max-[748px]:w-[110px] max-[748px]:py-4 max-[748px]:text-[11px] rounded-3xl"
         onClick={switchButtonHandler}
       >
         {aiInput ? (
