@@ -32,14 +32,17 @@ import {
 } from "@clerk/clerk-react";
 import { useEffect, useRef, useState } from "react";
 import { DialogDescription, DialogTitle } from "@radix-ui/react-dialog";
+import { useTheme } from "@/hooks/useTheme";
 
-function Navigation(props: any) {
+function Navigation() {
   const navigate = useNavigate();
   const lastScrollY = useRef(0);
   const [hidden, setHidden] = useState(false);
 
+  const { theme, setTheme } = useTheme();
+
   const themeHandler = () => {
-    props.setTheme(props.theme === "dark" ? "light" : "dark");
+    setTheme(theme === "dark" ? "light" : "dark");
   };
 
   useEffect(() => {
@@ -104,7 +107,7 @@ function Navigation(props: any) {
             onClick={themeHandler}
             className="nav-theme-icon cursor-pointer text-white rounded-2xl hover:bg-[var(--nav-theme-icon-hover)]"
           >
-            {props.theme === "light" ? <Moon size={20} /> : <Sun size={21} />}
+            {theme === "light" ? <Moon size={20} /> : <Sun size={21} />}
           </button>
           {/* User Menu */}
           <SignedIn>
@@ -216,7 +219,7 @@ function Navigation(props: any) {
                 onClick={themeHandler}
                 className="cursor-pointer text-white text-[15px]"
               >
-                {props.theme === "light" ? (
+                {theme === "light" ? (
                   <a className="sheet-theme-icon flex border items-center justify-center gap-3 p-4 mx-5 rounded-4xl hover:bg-[var(--sheet-theme-icon-hover)]">
                     <Moon size={24} />
                     <p>Dark Mode</p>
