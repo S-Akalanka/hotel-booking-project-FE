@@ -10,13 +10,7 @@ import { Badge } from "../components/ui/badge";
 import { Separator } from "../components/ui/separator";
 import { RadioGroup, RadioGroupItem } from "../components/ui/radio-group";
 import { ImageWithFallback } from "../components/ImageWithFallback";
-import {
-  ChevronLeft,
-  MapPin,
-  Calendar,
-  Users,
-  Star,
-} from "lucide-react";
+import { ChevronLeft, MapPin, Calendar, Users, Star } from "lucide-react";
 import { motion } from "motion/react";
 import { useNavigate, useParams } from "react-router";
 import { useCreateBookingMutation, useGetHotelByIdQuery } from "@/lib/api";
@@ -36,7 +30,7 @@ export function BookingContent() {
     useCreateBookingMutation();
 
   const { checkInDate, checkOutDate, rooms, noOfGuests } = useSelector(
-    (state: any) => state.booking
+    (state: any) => state.booking,
   );
 
   useEffect(() => {
@@ -50,7 +44,7 @@ export function BookingContent() {
 
   const calculateNights = (
     checkInDate: Date | string | null,
-    checkOutDate: Date | string | null
+    checkOutDate: Date | string | null,
   ): number => {
     if (!checkInDate || !checkOutDate) return 0;
 
@@ -85,24 +79,29 @@ export function BookingContent() {
     if (!room) return console.error("Selected room not found");
 
     try {
-      await createBooking({
+      // 1. Create the PENDING booking in DB
+      const newBooking = await createBooking({
         userId: userId,
         hotelId: hotel._id,
-        checkIn: new Date(bookingDetails.checkIn).toDateString(),
-        checkOut: new Date(bookingDetails.checkOut).toDateString(),
+        checkIn: new Date(bookingDetails.checkIn).toISOString(),
+        checkOut: new Date(bookingDetails.checkOut).toISOString(),
         noOfRooms: parseInt(rooms),
         roomType: roomType,
         price: room.price,
         noOfGuests: parseInt(noOfGuests),
       }).unwrap();
-      console.log("Booking created!");
+
+      console.log("Booking created with ID:", newBooking._id);
+
+      // 2. Redirect the user to the Checkout Page with the new Booking ID
+      navigate(`/checkout/${newBooking._id}`);
     } catch (error) {
       console.error("Booking failed:", error);
     }
   };
 
   const selectedRoom = hotel.roomTypes.find(
-    (room: any) => room.id === roomType
+    (room: any) => room.id === roomType,
   );
   const subtotal = selectedRoom
     ? selectedRoom.price * bookingDetails.nights * bookingDetails.rooms

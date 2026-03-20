@@ -3,7 +3,11 @@ import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 export const api = createApi({
   reducerPath: "api",
   baseQuery: fetchBaseQuery({
-    baseUrl: import.meta.env.VITE_BACKEND_URL || "http://localhost:8000/api/",
+    baseUrl:
+      (import.meta.env.VITE_BACKEND_URL || "http://localhost:8000/api").replace(
+        /\/$/,
+        "",
+      ) + "/",
     prepareHeaders: async (headers) => {
       if (window.Clerk && window.Clerk.session) {
         try {
@@ -18,7 +22,7 @@ export const api = createApi({
       return headers;
     },
   }),
-  tagTypes: ["Bookings", "Users","Hotels"],
+  tagTypes: ["Bookings", "Users", "Hotels"],
   endpoints: (build) => ({
     getAllHotels: build.query({
       query: () => "hotels",
@@ -107,6 +111,19 @@ export const api = createApi({
       }),
       invalidatesTags: [{ type: "Bookings", id: "LIST" }],
     }),
+
+    createCheckoutSession: build.mutation({
+      query: (bookingId) => ({
+        url: "payments/create-checkout-session",
+        method: "POST",
+        body: { bookingId },
+      }),
+    }),
+
+    getBookingStatus: build.query({
+      query: (bookingId) => `booking/${bookingId}`,
+      providesTags: (result, error, id) => [{ type: "Bookings", id }],
+    }),
   }),
 });
 
@@ -123,4 +140,6 @@ export const {
   useCreateOrFetchUserMutation,
   useGetuserPastBookingsQuery,
   useCreateBookingMutation,
+  useCreateCheckoutSessionMutation,
+  useGetBookingStatusQuery,
 } = api;
