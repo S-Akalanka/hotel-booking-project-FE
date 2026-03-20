@@ -16,6 +16,8 @@ import { store } from "./lib/store";
 import { ClerkProvider } from "@clerk/clerk-react";
 import ProtectLayout from "./components/layouts/protect.layout";
 import { CheckoutForm } from "./components/checkout";
+import AdminProtectLayout from "./components/layouts/admin-protect.layout";
+import CreateHotelPage from "./pages/Create-hotel.page";
 
 const PUBLISHABLE_KEY = import.meta.env.VITE_CLERK_PUBLISHABLE_KEY;
 
@@ -39,6 +41,11 @@ createRoot(document.getElementById("root")!).render(
                 <Route path="/hotels/:_id" element={<HotelDetailsPage />} />
                 <Route path="/hotels/:_id/book" element={<BookingPage />} />
                 <Route path="/checkout/:bookingId" element={<CheckoutForm />} />
+                <Route element={<AdminProtectLayout />}>
+                  <Route 
+                  path="/admin/create-hotel"
+                  element={<CreateHotelPage />} />
+                </Route>
               </Route>
             </Route>
             <Route path="*" element={<NotFoundPage />} />

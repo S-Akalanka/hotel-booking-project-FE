@@ -9,10 +9,8 @@ const stripePromise = loadStripe(import.meta.env.VITE_STRIPE_PUBLISHABLE_KEY);
 export const CheckoutForm = () => {
   const { bookingId } = useParams();
   
-  // 1. Initialize your RTK Mutation
   const [createCheckoutSession] = useCreateCheckoutSessionMutation();
 
-  // 2. Stripe calls this function to get the "Key"
   const fetchClientSecret = useCallback(async () => {
     try {
       const result = await createCheckoutSession(bookingId).unwrap();
