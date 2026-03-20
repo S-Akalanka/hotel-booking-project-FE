@@ -4,7 +4,7 @@ export const api = createApi({
   reducerPath: "api",
   baseQuery: fetchBaseQuery({
     baseUrl:
-      (import.meta.env.VITE_BACKEND_URL || "http://localhost:8000/api").replace(
+      ("http://localhost:8000/api").replace(
         /\/$/,
         "",
       ) + "/",

@@ -79,7 +79,6 @@ export function BookingContent() {
     if (!room) return console.error("Selected room not found");
 
     try {
-      // 1. Create the PENDING booking in DB
       const newBooking = await createBooking({
         userId: userId,
         hotelId: hotel._id,
@@ -87,13 +86,12 @@ export function BookingContent() {
         checkOut: new Date(bookingDetails.checkOut).toISOString(),
         noOfRooms: parseInt(rooms),
         roomType: roomType,
-        price: room.price,
+        price: total, // <--- This 'total' variable already has taxes/nights/rooms!
         noOfGuests: parseInt(noOfGuests),
+        status: "CONFIRMED", // Make sure these match your Mongoose Enum Case!
+        paymentStatus: "PENDING"
       }).unwrap();
 
-      console.log("Booking created with ID:", newBooking._id);
-
-      // 2. Redirect the user to the Checkout Page with the new Booking ID
       navigate(`/checkout/${newBooking._id}`);
     } catch (error) {
       console.error("Booking failed:", error);

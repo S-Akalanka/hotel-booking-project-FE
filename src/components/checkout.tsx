@@ -23,7 +23,7 @@ export const CheckoutForm = () => {
   }, [bookingId, createCheckoutSession]);
 
   return (
-    <div id="checkout" className="my-8">
+    <div id="checkout" className="my-28">
       <EmbeddedCheckoutProvider stripe={stripePromise} options={{ fetchClientSecret }}>
         <EmbeddedCheckout />
       </EmbeddedCheckoutProvider>
