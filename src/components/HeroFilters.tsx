@@ -65,9 +65,9 @@ const filterFormSchema = z
     {
       message: "Either provide just location or fill all fields",
       path: ["location"],
-    }
+    },
   );
- 
+
 type HeroProps = {
   onSearch: () => void;
 };
@@ -77,7 +77,8 @@ export default function HeroFilters({ onSearch }: HeroProps) {
   const [open, setOpen] = useState(false);
   const { isSignedIn } = useUser();
 
-  const dispatch = useDispatch();``
+  const dispatch = useDispatch();
+  ``;
 
   const {
     data: locations = [],
@@ -140,7 +141,7 @@ export default function HeroFilters({ onSearch }: HeroProps) {
 
   // common style
   const filter =
-    "border-solid border-[0.2px] border-black text-black rounded-[0.5rem] py-7 max-[748px]:py-5 text-[1rem] max-[748px]:text-[0.7rem]";
+    "border-solid border-[0.2px] border-black text-black rounded-[0.5rem] py-7 max-[748px]:py-6 text-[1rem] max-[748px]:text-[0.8rem]";
 
   return (
     <>
@@ -152,7 +153,7 @@ export default function HeroFilters({ onSearch }: HeroProps) {
         {aiInput ? (
           <>
             {" "}
-            <SlidersHorizontal/> Filters{" "}
+            <SlidersHorizontal /> Filters{" "}
           </>
         ) : (
           <>
@@ -175,31 +176,28 @@ export default function HeroFilters({ onSearch }: HeroProps) {
       {aiInput ? (
         <Form {...aiForm}>
           <form
-            onSubmit={aiForm.handleSubmit(aiOnSubmit, (errors) => {
-              if (errors.prompt) {
-                toast.error(errors.prompt.message);
-              }
-            })}
-            className="flex gap-3 mx-8"
+            onSubmit={aiForm.handleSubmit(aiOnSubmit)}
+            className="flex flex-wrap items-center gap-3 mx-auto w-full max-w-[1250px] justify-center"
           >
             <FormField
               control={aiForm.control}
               name="prompt"
               render={({ field }) => (
-                <FormItem>
+                <FormItem className="flex-1 min-w-[300px]">
                   <FormControl>
                     <Input
                       placeholder="Prompt"
-                      className="w-218 max-[748px]:w-100 max-[748px]:text- py-7 px-8 rounded-4xl border-solid border-[0.2px] flex border-black bg-white dark:bg-black"
+                      className="w-full py-7 px-8 max-[740px]:py-5 max-[740px]:text-[0.8rem] rounded-4xl border border-black bg-white dark:bg-black"
                       {...field}
                     />
                   </FormControl>
                 </FormItem>
               )}
             />
+
             <Button
               type="submit"
-              className="prompt-search-btn transform transition-transform duration-300 hover:scale-103 bg-[var(--search-filter)] hover:bg-[var(--search-filter-hover)] w-28 max-[748px]:w-20 rounded-4xl text-black py-7 text-[1rem]"
+              className={`filter-search ${filter} border-none transform transition-transform duration-300 hover:scale-103 filter-search bg-[var(--search-filter)] hover:bg-[var(--search-filter-hover)] ml-3 w-28 max-[748px]:w-24 rounded-4xl`}
               onClick={onSearch}
             >
               <Search />
@@ -228,7 +226,7 @@ export default function HeroFilters({ onSearch }: HeroProps) {
                       <PopoverTrigger asChild>
                         <Button
                           type="button"
-                          className={`${filter} bg-[var(--location-filter)] hover:bg-[var(--location-filter-hover)] text-[1rem] max-[748px]:text-[0.7rem] w-56 max-[748px]:w-36 `}
+                          className={`${filter} bg-[var(--location-filter)] hover:bg-[var(--location-filter-hover)] text-[1rem] w-56 max-[748px]:w-36 `}
                         >
                           <MapPin />
                           {field.value || "Where to ?"}
@@ -340,8 +338,8 @@ export default function HeroFilters({ onSearch }: HeroProps) {
                             {i == 1
                               ? `${i} Guest`
                               : i === 5
-                              ? `${i}+ Guests`
-                              : `${i} Guests`}
+                                ? `${i}+ Guests`
+                                : `${i} Guests`}
                           </DropdownMenuItem>
                         ))}
                       </DropdownMenuContent>
@@ -352,7 +350,7 @@ export default function HeroFilters({ onSearch }: HeroProps) {
 
               <Button
                 type="submit"
-                className={`filter-search ${filter} border-none transform transition-transform duration-300 hover:scale-103 filter-search bg-[var(--search-filter)] hover:bg-[var(--search-filter-hover)] ml-3 w-28 max-[748px]:w-20 rounded-4xl`}
+                className={`filter-search ${filter} border-none transform transition-transform duration-300 hover:scale-103 filter-search bg-[var(--search-filter)] hover:bg-[var(--search-filter-hover)] ml-3 w-28 max-[748px]:w-24 rounded-4xl`}
                 onClick={onSearch}
               >
                 <Search />

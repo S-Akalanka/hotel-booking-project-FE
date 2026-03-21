@@ -57,7 +57,7 @@ function Hero({ onSearch }: HeroProps) {
         )}
       </div>
 
-      <div className="hero-title absolute top-1/5 left-1/9 mr-[40px] text-white flex flex-col text-8xl gap-4">
+      <div className="hero-title absolute top-1/5 left-1/9 mr-[40px] text-white flex flex-col text-8xl gap-1 max-[748px]:text-[1rem]">
         <span>Discover</span>
         <span>Your Perfect</span>
         <span>Luxury Escape</span>
