@@ -36,15 +36,16 @@ createRoot(document.getElementById("root")!).render(
               <Route path="/sign-in" element={<SignInPage />} />
               <Route path="/sign-up" element={<SignUpPage />} />
               <Route path="/hotels" element={<HotelsPage />} />
+              <Route path="/hotels/:_id" element={<HotelDetailsPage />} />
               <Route element={<ProtectLayout />}>
                 <Route path="/users" element={<AccountPage />} />
-                <Route path="/hotels/:_id" element={<HotelDetailsPage />} />
                 <Route path="/hotels/:_id/book" element={<BookingPage />} />
                 <Route path="/checkout/:bookingId" element={<CheckoutForm />} />
                 <Route element={<AdminProtectLayout />}>
-                  <Route 
-                  path="/admin/create-hotel"
-                  element={<CreateHotelPage />} />
+                  <Route
+                    path="/admin/create-hotel"
+                    element={<CreateHotelPage />}
+                  />
                 </Route>
               </Route>
             </Route>
@@ -53,5 +54,5 @@ createRoot(document.getElementById("root")!).render(
         </BrowserRouter>
       </Provider>
     </ClerkProvider>
-  </StrictMode>
+  </StrictMode>,
 );

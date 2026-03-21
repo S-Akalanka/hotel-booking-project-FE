@@ -45,7 +45,7 @@ function Hero({ onSearch }: HeroProps) {
             return (
               <div
                 key={index}
-                className={`bg-black inset-0 absolute bg-cover bg-center transition-opacity duration-[10000ms] ease-in-out ${
+                className={`bg-black inset-0 absolute bg-cover bg-center transition-opacity duration-[5000ms] ease-in-out ${
                   index === currentSlide ? "opacity-100" : "opacity-0"
                 } ${!imagesLoaded[index] ? "opacity-0" : ""}`}
                 style={{ backgroundImage: `url(${image})` }}
